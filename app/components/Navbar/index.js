@@ -22,7 +22,7 @@ export default class Navbar extends Component {
           <a href="#">VIDEO</a>
         </li>
         <HoverSearch cls="nav__navItem">
-          {(searching) => {
+          {(searching, onMouseOut) => {
             return (
               <Fragment>
                 <a href="#">
@@ -31,16 +31,16 @@ export default class Navbar extends Component {
                 </a>
                 {searching === true && (
                   // query component
-                  <div className="navContent">
+                  <div className="navContent" onMouseOut={onMouseOut}>
                     <Loading />
                   </div>
                 )}
               </Fragment>
             );
           }}
-        </HoverSearch>{" "}
+        </HoverSearch>
         <HoverSearch cls="nav__navItem">
-          {(searching) => {
+          {(searching, onMouseOut) => {
             return (
               <Fragment>
                 <a href="#">
@@ -49,7 +49,7 @@ export default class Navbar extends Component {
                 </a>
                 {searching === true && (
                   // query component
-                  <div className="navContent">
+                  <div className="navContent" onMouseOut={onMouseOut}>
                     <Loading />
                   </div>
                 )}
@@ -58,7 +58,7 @@ export default class Navbar extends Component {
           }}
         </HoverSearch>
         <HoverSearch cls="nav__navItem">
-          {(searching) => {
+          {(searching, onMouseOut) => {
             return (
               <Fragment>
                 <a href="#">
@@ -66,7 +66,7 @@ export default class Navbar extends Component {
                   <FaCaretDown className="DDicons" />
                 </a>
                 {searching === true && (
-                  <div className="navContent">
+                  <div className="navContent" onMouseOut={onMouseOut}>
                     <Loading />
                   </div>
                 )}
@@ -75,7 +75,7 @@ export default class Navbar extends Component {
           }}
         </HoverSearch>
         <HoverSearch cls="nav__navItem">
-          {(searching) => {
+          {(searching, onMouseOut) => {
             return (
               <Fragment>
                 <a href="#">
@@ -83,7 +83,7 @@ export default class Navbar extends Component {
                   <FaCaretDown className="DDicons" />
                 </a>
                 {searching === true && (
-                  <div className="navContent">
+                  <div className="navContent" onMouseOut={onMouseOut}>
                     <Loading />
                   </div>
                 )}
@@ -92,7 +92,7 @@ export default class Navbar extends Component {
           }}
         </HoverSearch>
         <HoverSearch cls="nav__navItem">
-          {(searching) => {
+          {(searching, onMouseOut) => {
             return (
               <Fragment>
                 <a href="#">
@@ -100,7 +100,7 @@ export default class Navbar extends Component {
                   <FaCaretDown className="DDicons" />
                 </a>
                 {searching === true && (
-                  <div className="navContent">
+                  <div className="navContent" onMouseOut={onMouseOut}>
                     <Loading />
                   </div>
                 )}
@@ -109,7 +109,7 @@ export default class Navbar extends Component {
           }}
         </HoverSearch>
         <HoverSearch cls="nav__navItem">
-          {(searching) => {
+          {(searching, onMouseOut) => {
             return (
               <Fragment>
                 <a href="#">
@@ -117,7 +117,7 @@ export default class Navbar extends Component {
                   <FaCaretDown className="DDicons" />
                 </a>
                 {searching === true && (
-                  <div className="navContent">
+                  <div className="navContent" onMouseOut={onMouseOut}>
                     <Loading />
                   </div>
                 )}
@@ -126,7 +126,7 @@ export default class Navbar extends Component {
           }}
         </HoverSearch>
         <HoverSearch cls="nav__navItem">
-          {(searching) => {
+          {(searching, onMouseOut) => {
             return (
               <Fragment>
                 <a href="#">
@@ -134,7 +134,7 @@ export default class Navbar extends Component {
                   <FaCaretDown className="DDicons" />
                 </a>
                 {searching === true && (
-                  <div className="navContent">
+                  <div className="navContent" onMouseOut={onMouseOut}>
                     <Loading />
                   </div>
                 )}
@@ -143,28 +143,34 @@ export default class Navbar extends Component {
           }}
         </HoverSearch>
         <HoverSearch cls="nav__navItem marginLeftAuto">
-          {(searching) => {
+          {(searching, onMouseOut) => {
             return (
               <Fragment>
                 <a href="#">
                   <FaSearch className="DDicons" />
                 </a>
-                {searching === true && <div className="navSearch">lol</div>}
+                {searching === true && (
+                  <div className="navSearch" onMouseOut={onMouseOut}>
+                    <form>
+                      <input type="text" placeholder="Search" />
+                      <button type="submit">Search</button>
+                    </form>
+                  </div>
+                )}
               </Fragment>
             );
           }}
         </HoverSearch>
         <HoverSearch cls="nav__navItem">
-          {(searching) => {
+          {(searching, onMouseOut) => {
             return (
               <Fragment>
                 <a href="#">
                   <FaFacebookSquare className="DDicons" />
-
-                  <FaTwitter className="DDicons" />
+                  <FaTwitter className="DDicons ml-30" />
                 </a>
                 {searching === true && (
-                  <div className="navContent">
+                  <div className="navContent" onMouseOut={onMouseOut}>
                     <Loading />
                   </div>
                 )}
@@ -173,14 +179,14 @@ export default class Navbar extends Component {
           }}
         </HoverSearch>
         <HoverSearch cls="nav__navItem">
-          {(searching) => {
+          {(searching, onMouseOut) => {
             return (
               <Fragment>
                 <a href="#">
-                  <FaUserAlt className="DDicons" />
+                  <FaUserAlt className="DDicons ml-30" />
                 </a>
                 {searching === true && (
-                  <div className="navContent">
+                  <div className="navContent" onMouseOut={onMouseOut}>
                     <Loading />
                   </div>
                 )}

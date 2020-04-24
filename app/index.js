@@ -2,11 +2,7 @@ import React, { Component, Fragment } from "react";
 import ReactDom from "react-dom";
 import Navbar from "./components/Navbar";
 
-import "./index.css";
-
-const Content = (props) => {
-  return <div>Hola mundo desde otro componente</div>;
-};
+import "./index.scss";
 
 class App extends Component {
   render() {

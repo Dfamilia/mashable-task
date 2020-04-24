@@ -1,22 +1,24 @@
 .nav {
   list-style-type: none;
   margin: 0;
-  padding: 0 5vw 0 5vw;
+  padding: 0 5.8vw 0 6vw;
   overflow: hidden;
   background: #00aeef;
+  font-family: "ProximaNovaRegular", Arial, sans-serif;
   display: flex;
   flex-direction: row;
 
   &__navItem {
     font-size: 14px;
     color: white;
+    overflow: visible;
   }
 
   &__navItem a {
     text-decoration: none;
     padding: 18px 16px;
     line-height: 60px;
-    margin: 0;
+    margin: 0 0 10px 0;
     color: inherit;
   }
 
@@ -28,7 +30,7 @@
   &__navItem--home {
     font-size: 40px;
     font-weight: 900;
-    padding: 0;
+    padding: 0 10px 0 0;
     overflow: hidden;
   }
 }
@@ -37,11 +39,13 @@
   position: absolute;
   left: 5vw;
   top: 60px;
-  border: 1px solid;
   height: 400px;
   width: 90vw;
   text-align: center;
   font-size: 10vw;
+  color: #000;
+  z-index: 0;
+  overflow: hidden;
 }
 
 .marginLeftAuto {
@@ -51,15 +55,28 @@
 .DDicons {
   vertical-align: middle;
   font-size: 20px;
+  margin-left: 5px;
 }
 
 .navSearch {
   position: absolute;
-  left: 49.2vw;
+  left: 46.5vw;
   top: 60px;
-  border: 1px solid;
   height: 75px;
-  width: 40vw;
+  width: 39vw;
   text-align: center;
+  background-color: #ddf0f9;
+  border-style: none none solid none;
+
+  &__navSearch form {
+    display: flex;
+    flex-direction: row;
+    width: 90%;
+    height: 30px;
+  }
 }
 /* cuando se completa el search #ddf0f9 */
+
+.ml-30 {
+  margin-left: 30px;
+}

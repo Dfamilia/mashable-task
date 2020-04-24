@@ -26,12 +26,8 @@ export default class HoverSearch extends Component {
   render() {
     const { cls } = this.props;
     return (
-      <li
-        className={cls}
-        onMouseOver={this.onMouseOver}
-        onMouseOut={this.onMouseOut}
-      >
-        {this.props.children(this.state.hovering)}
+      <li className={cls} onMouseOver={this.onMouseOver}>
+        {this.props.children(this.state.hovering, this.onMouseOut)}
       </li>
     );
   }
