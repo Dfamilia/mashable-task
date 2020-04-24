@@ -1,0 +1,54 @@
+.nav {
+  list-style-type: none;
+  margin: 0;
+  padding: 0 5vw 0 7vw;
+  overflow: hidden;
+  background: #00aeef;
+  display: flex;
+  flex-direction: row;
+}
+
+.navItem {
+  font-size: 14px;
+}
+
+.navItem a {
+  text-decoration: none;
+  padding: 18px 16px;
+  line-height: 60px;
+  margin: 0;
+  color: white;
+}
+
+.navItem:hover {
+  background-color: #0076a3;
+}
+
+.navItem.home {
+  font-size: 50px;
+  font-weight: 900;
+  padding: 0 30px 0 0;
+  overflow: hidden;
+}
+
+.navContent {
+  position: absolute;
+  width: 200px;
+  left: 5vw;
+  top: 60px;
+  border: 1px solid;
+  height: 400px;
+  width: 90vw;
+  text-align: center;
+  font-size: 10vw;
+}
+
+.marginLeftAuto {
+  margin-left: auto;
+}
+
+.DDicons {
+  vertical-align: middle;
+  color: #fff;
+  font-size: 20px;
+}
