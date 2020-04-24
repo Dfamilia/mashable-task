@@ -9,19 +9,19 @@ import {
 import HoverSearch from "../HoverSearch";
 import Loading from "../Loading";
 
-import "./style.css";
+import "./style.scss";
 
 export default class Navbar extends Component {
   render() {
     return (
       <ul className="nav">
-        <li className="navItem home">
+        <li className="nav__navItem nav__navItem--home">
           <a href="#">Mashable</a>
         </li>
-        <li className="navItem">
+        <li className="nav__navItem">
           <a href="#">VIDEO</a>
         </li>
-        <HoverSearch cls="navItem">
+        <HoverSearch cls="nav__navItem">
           {(searching) => {
             return (
               <Fragment>
@@ -39,7 +39,7 @@ export default class Navbar extends Component {
             );
           }}
         </HoverSearch>{" "}
-        <HoverSearch cls="navItem">
+        <HoverSearch cls="nav__navItem">
           {(searching) => {
             return (
               <Fragment>
@@ -57,7 +57,7 @@ export default class Navbar extends Component {
             );
           }}
         </HoverSearch>
-        <HoverSearch cls="navItem">
+        <HoverSearch cls="nav__navItem">
           {(searching) => {
             return (
               <Fragment>
@@ -74,7 +74,7 @@ export default class Navbar extends Component {
             );
           }}
         </HoverSearch>
-        <HoverSearch cls="navItem">
+        <HoverSearch cls="nav__navItem">
           {(searching) => {
             return (
               <Fragment>
@@ -91,7 +91,7 @@ export default class Navbar extends Component {
             );
           }}
         </HoverSearch>
-        <HoverSearch cls="navItem">
+        <HoverSearch cls="nav__navItem">
           {(searching) => {
             return (
               <Fragment>
@@ -108,7 +108,7 @@ export default class Navbar extends Component {
             );
           }}
         </HoverSearch>
-        <HoverSearch cls="navItem">
+        <HoverSearch cls="nav__navItem">
           {(searching) => {
             return (
               <Fragment>
@@ -125,7 +125,7 @@ export default class Navbar extends Component {
             );
           }}
         </HoverSearch>
-        <HoverSearch cls="navItem">
+        <HoverSearch cls="nav__navItem">
           {(searching) => {
             return (
               <Fragment>
@@ -142,19 +142,19 @@ export default class Navbar extends Component {
             );
           }}
         </HoverSearch>
-        <HoverSearch cls="navItem marginLeftAuto">
+        <HoverSearch cls="nav__navItem marginLeftAuto">
           {(searching) => {
             return (
               <Fragment>
                 <a href="#">
                   <FaSearch className="DDicons" />
                 </a>
-                {searching === true && <div className="navContent">lol</div>}
+                {searching === true && <div className="navSearch">lol</div>}
               </Fragment>
             );
           }}
         </HoverSearch>
-        <HoverSearch cls="navItem">
+        <HoverSearch cls="nav__navItem">
           {(searching) => {
             return (
               <Fragment>
@@ -172,7 +172,7 @@ export default class Navbar extends Component {
             );
           }}
         </HoverSearch>
-        <HoverSearch cls="navItem">
+        <HoverSearch cls="nav__navItem">
           {(searching) => {
             return (
               <Fragment>
