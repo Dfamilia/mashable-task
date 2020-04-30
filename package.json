@@ -6,7 +6,7 @@
   "scripts": {
     "build": "webpack --mode development",
     "start": "webpack-dev-server --mode development --open",
-    "lint": "eslint \"./app/**/*.js\""
+    "lint": "eslint \"./src/**/*.jsx\""
   },
   "babel": {
     "presets": [

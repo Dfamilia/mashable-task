@@ -4,7 +4,7 @@ import Navbar from './components/Navbar/index.jsx';
 import './index.scss';
 
 function App() {
-  return <Navbar />
+  return <Navbar />;
 }
 
 ReactDom.render(<App />, document.getElementById('app'));

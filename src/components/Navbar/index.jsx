@@ -36,8 +36,8 @@ function Navbar() {
         <a href="#">VIDEO</a>
       </li>
 
-      {navFetchLinks.map((item, i) => (
-        <li key={i} className="nav__navItem">
+      {navFetchLinks.map((item) => (
+        <li key={item} className="nav__navItem">
           <a href="#">{item}</a>
           <FaCaretDown className="icons icons__DD" />
         </li>
