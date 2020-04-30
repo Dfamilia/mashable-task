@@ -1,7 +1,7 @@
 .nav {
   list-style-type: none;
   margin: 0;
-  padding: 0 5.8vw 0 6vw;
+  padding: 0px 2.8vw 0 3vw;
   overflow: hidden;
   background: #00aeef;
   font-family: "ProximaNovaRegular", Arial, sans-serif;
@@ -9,26 +9,25 @@
   flex-direction: row;
 
   &__navItem {
-    font-size: 14px;
+    font-size: 12px;
     color: white;
     overflow: visible;
   }
 
   &__navItem a {
     text-decoration: none;
-    padding: 18px 16px;
+    padding: 14px 5px 14px 16px;
     line-height: 60px;
-    margin: 0 0 10px 0;
     color: inherit;
   }
 
   &__navItem:hover {
-    background-color: #ddf0f9;
-    color: #00aeef;
+    background-color: #60c8f8;
+    color: #fff;
   }
 
   &__navItem--home {
-    font-size: 40px;
+    font-size: 35px;
     font-weight: 900;
     padding: 0 10px 0 0;
     overflow: hidden;
@@ -46,37 +45,97 @@
   color: #000;
   z-index: 0;
   overflow: hidden;
+  border: 1px solid;
 }
 
 .marginLeftAuto {
   margin-left: auto;
 }
 
-.DDicons {
+.icons {
   vertical-align: middle;
-  font-size: 20px;
-  margin-left: 5px;
+
+  &__DD {
+    font-size: 14px;
+    margin-right: 10px;
+  }
+
+  &__panel {
+    font-size: 16px;
+  }
+}
+
+.iconsDiv {
+  line-height: 60px;
+  padding: 0 15px;
 }
 
 .navSearch {
   position: absolute;
-  left: 46.5vw;
+  left: 46vw;
   top: 60px;
-  height: 75px;
-  width: 39vw;
+  height: 60px;
+  width: 42.2vw;
   text-align: center;
   background-color: #ddf0f9;
   border-style: none none solid none;
 
-  &__navSearch form {
+  & form {
     display: flex;
     flex-direction: row;
-    width: 90%;
-    height: 30px;
+    height: 40px;
+    padding: 10px 7px;
+    border: none;
+    border-bottom: 5px solid #00aeef;
+
+    & > input {
+      width: 85%;
+      border: none;
+      padding-left: 10px;
+    }
+
+    & > button {
+      width: 15%;
+      border: none;
+      background: #00aeef;
+      color: #fff;
+    }
   }
 }
 /* cuando se completa el search #ddf0f9 */
 
+.searchBox {
+  .navSearch {
+    display: none;
+  }
+
+  &:hover {
+    .navSearch {
+      display: block;
+    }
+  }
+}
+
 .ml-30 {
   margin-left: 30px;
+}
+
+.ml-20 {
+  margin-left: 20px;
+}
+
+.mr-30 {
+  margin-right: 30px;
+}
+
+.pr-10 {
+  padding-right: 10px;
+}
+
+.pr-20 {
+  padding-right: 20px;
+}
+
+.pr-30 {
+  padding-right: 30px;
 }
