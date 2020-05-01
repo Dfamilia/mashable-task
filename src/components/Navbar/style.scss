@@ -20,10 +20,20 @@
       color: inherit;
     }
 
+    &.active{
+      transform: scale(5px);
+      background: #fff;
+      color: #60c8f8;
+
+      &:hover{
+        background: #fff;
+        color: #60c8f8;
+      }
+    }
+
     &:hover {
       background-color: #60c8f8;
       color: #fff;
-
     }
 
     &--home {
@@ -31,12 +41,16 @@
       font-weight: 900;
       padding: 0 10px 0 0;
       overflow: hidden;
+
+      &:hover{
+        background: #fff;
+        color: #60c8f8;
+      }
     }
   }
 }
 
-
-.navContent {
+.subMenu {
   position: absolute;
   left: 5vw;
   top: 60px;
@@ -52,7 +66,20 @@
 
 }
 
-.active{
+// TODO: im here
+.follow_submenu{
+  position: absolute;
+  display: none;
+  border: 1px solid black;
+  left: 81.8vw;
+  top: 60px;
+  height: 245px;
+  width: 13vw;
+  color: black;
+  line-height: 2;
+}
+
+.open{
   display: block;
 }
 
@@ -81,13 +108,18 @@
 
 .navSearch {
   position: absolute;
-  left: 46vw;
+  left: 43vw;
   top: 60px;
   height: 60px;
-  width: 42.2vw;
+  width: 46vw;
   text-align: center;
   background-color: #ddf0f9;
   border-style: none none solid none;
+  display:none;
+
+  &.open{
+    display: block;
+  }
 
   & form {
     display: flex;
@@ -113,17 +145,6 @@
 }
 /* cuando se completa el search #ddf0f9 */
 
-.searchBox {
-  .navSearch {
-    display: none;
-  }
-
-  &:hover {
-    .navSearch {
-      display: block;
-    }
-  }
-}
 
 .ml-30 {
   margin-left: 30px;
