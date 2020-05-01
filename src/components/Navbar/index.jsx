@@ -32,15 +32,55 @@ export default class Navbar extends Component {
         'SOCIAL GOOD',
         'SHOP',
         'MORE',
-      ]
-    }
+      ],
+      onNav: false,
+      onDisplay: false,
+      active: 'active',
+    };
 
     this.onSubmit = this.onSubmit.bind(this);
     this.searchHandleClick = this.searchHandleClick.bind(this);
     this.isActive = this.isActive.bind(this);
+    this.onMouseOver = this.onMouseOver.bind(this);
+    this.onNavMouseLeave = this.onNavMouseLeave.bind(this);
+    this.onDisplayMouseLeave = this.onDisplayMouseLeave.bind(this);
   }
   // saver input search ref
   // let textInput = null;
+
+  onMouseOver() {
+    this.setState({
+      onNav: true,
+    });
+  }
+
+  onNavMouseLeave() {
+    console.log('onNavl');
+
+    this.setState({
+      onNav: false,
+    })
+
+    if (!this.state.onDisplay) {
+      this.setState({
+        active: '',
+      })
+    }
+  }
+
+  onDisplayMouseLeave() {
+    console.log('onNavl');
+
+    this.setState({
+      onDisplay: false,
+    })
+
+    if (!this.state.onNav) {
+      this.setState({
+        active: '',
+      })
+    }
+  }
 
   onSubmit(e) {
     e.preventDefault();
@@ -48,7 +88,7 @@ export default class Navbar extends Component {
 
   // fire focus method when user clicked search menuItem
   searchHandleClick() {
-    this.ref.textInput.focus();
+    this.textInput.current.focus();
   };
 
   isActive(active) {
@@ -58,7 +98,7 @@ export default class Navbar extends Component {
 
   render() {
     return (
-      <ul className="nav" >
+      <ul className="nav" onMouseLeave={this.onNavMouseLeave}>
         <li className="nav__navItem nav__navItem--home">
           <a href="#">Mashable</a>
         </li>
@@ -68,18 +108,17 @@ export default class Navbar extends Component {
         </li>
 
         {this.state.navFetchLinks.map((item) => (
-          <li id={item} cls="nav__navItem">
-            {(loading, active) => (
-              <>
-                <a href="#">{item}</a>
-                <FaCaretDown className="icons icons__DD" />
-                <div className={`navContent ${this.isActive(active)}`}>
-                  {loading}
-                </div>
-              </>
-            )}
+          <li key={item} className="nav__navItem" onMouseEnter={() => this.onMouseOver(item)} >
+
+            <a href="#">{item}</a>
+            <FaCaretDown className="icons icons__DD" />
+            <div className={`navContent ${this.state.active}`} onMouseLeave={this.onDisplayMouseLeave} >
+              {/* {loading} */}
+            </div>
+
           </li>
-        ))}
+        ))
+        }
 
         <li
           onClick={this.searchHandleClick}
@@ -107,7 +146,7 @@ export default class Navbar extends Component {
         >
           <FaUserAlt className="icons icons__panel " />
         </li>
-      </ul>
+      </ul >
     );
   }
 }
