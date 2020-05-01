@@ -1,7 +1,7 @@
 /* eslint-disable import/extensions */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import React, { Fragment } from 'react';
+import React, { Fragment, Component } from 'react';
 import {
   FaCaretDown,
   FaUserAlt,
@@ -10,94 +10,107 @@ import {
   FaSearch,
 } from 'react-icons/fa';
 
-import HoverSearch from '../HoverSearch/index.jsx';
+// import li from '../li/index.jsx';
 import Loading from '../Loading/index.jsx';
 
 
 import './style.scss';
 
-function Navbar() {
+export default class Navbar extends Component {
+
+  constructor(props) {
+    super(props);
+
+    this.textInput = React.createRef();
+
+    this.state = {
+      navFetchLinks: [
+        'ENTERTAINMENT',
+        'CULTURE',
+        'TECH',
+        'SCIENCE',
+        'SOCIAL GOOD',
+        'SHOP',
+        'MORE',
+      ]
+    }
+
+    this.onSubmit = this.onSubmit.bind(this);
+    this.searchHandleClick = this.searchHandleClick.bind(this);
+    this.isActive = this.isActive.bind(this);
+  }
   // saver input search ref
-  let textInput = null;
+  // let textInput = null;
 
-  // fire focus method when user clicked search menuItem
-  const searchHandleClick = () => {
-    textInput.focus();
-  };
-
-  const onSubmit = (e) => {
+  onSubmit(e) {
     e.preventDefault();
   }
 
-  const isActive = (active) => {
+  // fire focus method when user clicked search menuItem
+  searchHandleClick() {
+    this.ref.textInput.focus();
+  };
+
+  isActive(active) {
     console.log('active', active);
   }
 
-  const navFetchLinks = [
-    'ENTERTAINMENT',
-    'CULTURE',
-    'TECH',
-    'SCIENCE',
-    'SOCIAL GOOD',
-    'SHOP',
-    'MORE',
-  ];
 
-  return (
-    <ul className="nav">
-      <li className="nav__navItem nav__navItem--home">
-        <a href="#">Mashable</a>
-      </li>
+  render() {
+    return (
+      <ul className="nav" >
+        <li className="nav__navItem nav__navItem--home">
+          <a href="#">Mashable</a>
+        </li>
 
-      <li className="nav__navItem pr-10">
-        <a href="#">VIDEO</a>
-      </li>
+        <li className="nav__navItem pr-10">
+          <a href="#">VIDEO</a>
+        </li>
 
-      {navFetchLinks.map((item) => (
-        <HoverSearch id={item} cls="nav__navItem">
-          {(loading, active) => (
-            <>
-              <a href="#">{item}</a>
-              <FaCaretDown className="icons icons__DD" />
-              <div className={`navContent ${isActive(active)}`}>
-                {loading}
-              </div>
-            </>
-          )}
-        </HoverSearch>
-      ))}
+        {this.state.navFetchLinks.map((item) => (
+          <li id={item} cls="nav__navItem">
+            {(loading, active) => (
+              <>
+                <a href="#">{item}</a>
+                <FaCaretDown className="icons icons__DD" />
+                <div className={`navContent ${this.isActive(active)}`}>
+                  {loading}
+                </div>
+              </>
+            )}
+          </li>
+        ))}
 
-      <li
-        onClick={searchHandleClick}
-        className="nav__navItem marginLeftAuto iconsDiv searchBox"
-      >
-        <FaSearch className="icons icons__panel" />
+        <li
+          onClick={this.searchHandleClick}
+          className="nav__navItem marginLeftAuto iconsDiv searchBox"
+        >
+          <FaSearch className="icons icons__panel" />
 
-        <div className="navSearch">
-          <form onSubmit={onSubmit}>
-            <input type="text" ref={(input) => { textInput = input; }} id="search" />
-            <button type="submit">Search</button>
-          </form>
-        </div>
-      </li>
+          <div className="navSearch">
+            <form onSubmit={this.onSubmit}>
+              <input type="text" ref={this.textInput} id="search" />
+              <button type="submit">Search</button>
+            </form>
+          </div>
+        </li>
 
-      <li
-        className="nav__navItem iconsDiv pr-30"
-      >
-        <FaFacebookSquare className="icons icons__panel" />
-        <FaTwitter className="icons icons__panel ml-30" />
-      </li>
+        <li
+          className="nav__navItem iconsDiv pr-30"
+        >
+          <FaFacebookSquare className="icons icons__panel" />
+          <FaTwitter className="icons icons__panel ml-30" />
+        </li>
 
-      <li
-        className="nav__navItem iconsDiv"
-      >
-        <FaUserAlt className="icons icons__panel " />
-      </li>
-    </ul>
-  );
+        <li
+          className="nav__navItem iconsDiv"
+        >
+          <FaUserAlt className="icons icons__panel " />
+        </li>
+      </ul>
+    );
+  }
 }
-
-export default Navbar;
 
 
 /* NOTES:
