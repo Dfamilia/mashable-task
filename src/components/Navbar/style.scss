@@ -12,27 +12,29 @@
     font-size: 12px;
     color: white;
     overflow: visible;
-  }
 
-  &__navItem a {
-    text-decoration: none;
-    padding: 14px 5px 14px 16px;
-    line-height: 60px;
-    color: inherit;
-  }
+    a {
+      text-decoration: none;
+      padding: 14px 5px 14px 16px;
+      line-height: 60px;
+      color: inherit;
+    }
 
-  &__navItem:hover {
-    background-color: #60c8f8;
-    color: #fff;
-  }
+    &:hover {
+      background-color: #60c8f8;
+      color: #fff;
 
-  &__navItem--home {
-    font-size: 35px;
-    font-weight: 900;
-    padding: 0 10px 0 0;
-    overflow: hidden;
+    }
+
+    &--home {
+      font-size: 35px;
+      font-weight: 900;
+      padding: 0 10px 0 0;
+      overflow: hidden;
+    }
   }
 }
+
 
 .navContent {
   position: absolute;
@@ -46,7 +48,15 @@
   z-index: 0;
   overflow: hidden;
   border: 1px solid;
+  display: none;
+
+  &.active{
+      display: block;
+    }
 }
+
+
+
 
 .marginLeftAuto {
   margin-left: auto;
@@ -139,3 +149,4 @@
 .pr-30 {
   padding-right: 30px;
 }
+

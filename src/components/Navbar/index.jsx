@@ -1,4 +1,7 @@
-import React from 'react';
+/* eslint-disable import/extensions */
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+import React, { Fragment } from 'react';
 import {
   FaCaretDown,
   FaUserAlt,
@@ -7,14 +10,28 @@ import {
   FaSearch,
 } from 'react-icons/fa';
 
+import HoverSearch from '../HoverSearch/index.jsx';
+import Loading from '../Loading/index.jsx';
+
+
 import './style.scss';
 
 function Navbar() {
+  // saver input search ref
   let textInput = null;
 
+  // fire focus method when user clicked search menuItem
   const searchHandleClick = () => {
     textInput.focus();
   };
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+  }
+
+  const isActive = (active) => {
+    console.log('active', active);
+  }
 
   const navFetchLinks = [
     'ENTERTAINMENT',
@@ -37,21 +54,27 @@ function Navbar() {
       </li>
 
       {navFetchLinks.map((item) => (
-        <li key={item} className="nav__navItem">
-          <a href="#">{item}</a>
-          <FaCaretDown className="icons icons__DD" />
-        </li>
+        <HoverSearch id={item} cls="nav__navItem">
+          {(loading, active) => (
+            <>
+              <a href="#">{item}</a>
+              <FaCaretDown className="icons icons__DD" />
+              <div className={`navContent ${isActive(active)}`}>
+                {loading}
+              </div>
+            </>
+          )}
+        </HoverSearch>
       ))}
 
       <li
         onClick={searchHandleClick}
         className="nav__navItem marginLeftAuto iconsDiv searchBox"
-        role='menuitem'
       >
         <FaSearch className="icons icons__panel" />
 
         <div className="navSearch">
-          <form>
+          <form onSubmit={onSubmit}>
             <input type="text" ref={(input) => { textInput = input; }} id="search" />
             <button type="submit">Search</button>
           </form>
@@ -60,29 +83,23 @@ function Navbar() {
 
       <li
         className="nav__navItem iconsDiv pr-30"
-      // onMouseOver={() => this.onMouseOver('follow')}
-      // onMouseOut={() => this.onMouseOut('follow')}
       >
         <FaFacebookSquare className="icons icons__panel" />
         <FaTwitter className="icons icons__panel ml-30" />
-        {/* <div className="navContent" onMouseOut={this.onMouseOut}>
-            <Loading />
-          </div> */}
       </li>
 
       <li
         className="nav__navItem iconsDiv"
-      // onMouseOver={() => this.onMouseOver('account')}
-      // onMouseOut={() => this.onMouseOut('account')}
       >
         <FaUserAlt className="icons icons__panel " />
-
-        {/* <div className="navContent" onMouseOut={this.onMouseOut}>
-            <Loading />
-          </div> */}
       </li>
     </ul>
   );
 }
 
 export default Navbar;
+
+
+/* NOTES:
+  --- when we'll use react-router anchor become navLinks
+*/
