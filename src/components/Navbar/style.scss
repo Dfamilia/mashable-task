@@ -1,7 +1,8 @@
 .nav {
   list-style-type: none;
   margin: 0;
-  padding: 0px 2.8vw 0 3vw;
+  padding: 0px 7vw 0 8vw;
+  height: 50px;
   overflow: hidden;
   background: #00aeef;
   font-family: "ProximaNovaRegular", Arial, sans-serif;
@@ -15,8 +16,8 @@
 
     a {
       text-decoration: none;
-      padding: 14px 5px 14px 16px;
-      line-height: 60px;
+      padding: 8px 5px 8px 16px;
+      line-height: 50px;
       color: inherit;
     }
 
@@ -37,7 +38,7 @@
     }
 
     &--home {
-      font-size: 35px;
+      font-size: 30px;
       font-weight: 900;
       padding: 0 10px 0 0;
       overflow: hidden;
@@ -52,10 +53,10 @@
 
 .subMenu {
   position: absolute;
-  left: 5vw;
-  top: 60px;
+  left: 8vw;
+  top: 50px;
   height: 400px;
-  width: 90vw;
+  width: 85vw;
   text-align: center;
   font-size: 10vw;
   color: #000;
@@ -71,8 +72,8 @@
   position: absolute;
   display: none;
   border: 1px solid black;
-  left: 81.8vw;
-  top: 60px;
+  left: 76.6vw;
+  top: 50px;
   height: 245px;
   width: 13vw;
   color: black;
@@ -89,7 +90,7 @@
 }
 
 .icons {
-  vertical-align: middle;
+  vertical-align: text-bottom;
 
   &__DD {
     font-size: 14px;
@@ -97,21 +98,21 @@
   }
 
   &__panel {
-    font-size: 16px;
+    font-size: 18px;
   }
 }
 
 .iconsDiv {
-  line-height: 60px;
+  line-height: 55px;
   padding: 0 15px;
 }
 
 .navSearch {
   position: absolute;
-  left: 43vw;
-  top: 60px;
+  left: 46.7vw;
+  top: 50px;
   height: 60px;
-  width: 46vw;
+  width: 37vw;
   text-align: center;
   background-color: #ddf0f9;
   border-style: none none solid none;
@@ -130,7 +131,7 @@
     border-bottom: 5px solid #00aeef;
 
     & > input {
-      width: 85%;
+      width: 82%;
       border: none;
       padding-left: 10px;
     }

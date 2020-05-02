@@ -14,8 +14,7 @@
       "@babel/preset-react"
     ],
     "plugins": [
-      "@babel/plugin-proposal-class-properties",
-      "transform-react-jsx"
+      "@babel/plugin-proposal-class-properties"
     ]
   },
   "keywords": [],
@@ -27,7 +26,6 @@
     "@babel/preset-env": "7.9.5",
     "@babel/preset-react": "7.9.4",
     "babel-loader": "8.1.0",
-    "babel-plugin-transform-react-jsx": "6.24.1",
     "css-loader": "3.5.2",
     "eslint": "6.8.0",
     "eslint-config-airbnb": "18.1.0",

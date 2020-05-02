@@ -9,7 +9,7 @@ export default class HoverSearch extends Component {
     this.state = {
       data: null,
       loading: false,
-      active: false
+      active: false,
     };
 
     // this.onMouseOut = this.onMouseOut.bind(this);

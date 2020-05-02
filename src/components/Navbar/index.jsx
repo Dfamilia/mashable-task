@@ -11,7 +11,7 @@ import {
 } from 'react-icons/fa';
 
 // import li from '../li/index.jsx';
-import Loading from '../Loading/index.jsx';
+import Loading from '../Loading';
 
 
 import './style.scss';
