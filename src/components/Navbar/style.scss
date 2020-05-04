@@ -1,17 +1,33 @@
+$color-blue-active: #00A4E2;
+$color-white: #fff;
+
+$background-blue:#00aeef;
+$background-blue-hover:#0076a3;
+$background-white:#ddf0f9;
+$background-panel-left: #c7e6f5;
+
+%margin-botton{
+  border-bottom: 5px solid $background-blue;
+}
+
+%submenu-background{
+  background: $background-white;
+}
+
 .nav {
   list-style-type: none;
   margin: 0;
-  padding: 0px 7vw 0 8vw;
+  padding: 0px 3vw 0 2.5vw;
   height: 50px;
   overflow: hidden;
-  background: #00aeef;
+  background: $background-blue;
   font-family: "ProximaNovaRegular", Arial, sans-serif;
   display: flex;
   flex-direction: row;
 
   &__navItem {
     font-size: 12px;
-    color: white;
+    color: $color-white;
     overflow: visible;
 
     a {
@@ -23,18 +39,18 @@
 
     &.active{
       transform: scale(5px);
-      background: #ddf0f9;
-      color: #00A4E2;
+      background: $background-white;
+      color: $color-blue-active;
 
       &:hover{
-        background: #ddf0f9;
-        color: #00A4E2;
+        background: $background-white;
+        color: $color-blue-active;
       }
     }
 
     &:hover {
-      background-color: #0076a3;
-      color: #fff;
+      background-color: $background-blue-hover;
+      color: $color-white;
     }
 
     &--home {
@@ -44,8 +60,8 @@
       overflow: hidden;
 
       &:hover{
-        background: #ddf0f9;
-        color: #00A4E2;
+        background: $background-white;
+        color: $color-blue-active;
       }
     }
   }
@@ -53,48 +69,50 @@
 
 .subMenu {
   position: absolute;
-  left: 8vw;
+  left: 2.5vw;
   top: 50px;
   height: 290px;
-  width: 85vw;
-  background: #ddf0f9;
+  width: 94.5vw;
   text-align: center;
   color: #000;
   z-index: 0;
   overflow: hidden;
   display: none;
-  border-bottom: 5px solid #00aeef;
-
 
   .panel__left{
     width: 9vw;
-    background: #c7e6f5;
+    background: $background-panel-left;
   }
 
+  @extend %margin-botton;
+  @extend %submenu-background;
 }
 
-
-
-// TODO: im here
 .follow_submenu{
   position: absolute;
   display: none;
-  border: 1px solid black;
-  left: 76.6vw;
+  left: 81.3vw;
   top: 50px;
   height: 245px;
   width: 13vw;
   color: black;
   line-height: 2;
+
+  @extend %margin-botton;
+  @extend %submenu-background;
 }
 
 .open{
   display: flex;
 }
 
-
 .marginLeftAuto {
   margin-left: auto;
+}
+
+.iconsDiv {
+  line-height: 55px;
+  padding: 0 15px;
 }
 
 .icons {
@@ -106,23 +124,22 @@
   }
 
   &__panel {
-    font-size: 18px;
+    font-size: 1.2rem;
+  }
+
+  &__search{
+    width: 30px;
   }
 }
 
-.iconsDiv {
-  line-height: 55px;
-  padding: 0 15px;
-}
 
 .navSearch {
   position: absolute;
-  left: 46.7vw;
+  left: 43.4vw;
   top: 50px;
   height: 60px;
-  width: 37vw;
+  width: 45vw;
   text-align: center;
-  background-color: #ddf0f9;
   border-style: none none solid none;
   display:none;
 
@@ -136,7 +153,7 @@
     height: 40px;
     padding: 10px 7px;
     border: none;
-    border-bottom: 5px solid #00aeef;
+    border-bottom: 5px solid $background-blue;
 
     & > input {
       width: 82%;
@@ -147,10 +164,13 @@
     & > button {
       width: 15%;
       border: none;
-      background: #00aeef;
-      color: #fff;
+      background: $background-blue;
+      color: $background-white;
     }
   }
+
+  @extend %margin-botton;
+  @extend %submenu-background;
 }
 /* cuando se completa el search #ddf0f9 */
 
@@ -178,4 +198,3 @@
 .pr-30 {
   padding-right: 30px;
 }
-

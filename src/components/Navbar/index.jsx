@@ -1,7 +1,7 @@
 /* eslint-disable import/extensions */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import React, { Fragment, Component } from 'react';
+import React, { Component } from 'react';
 import {
   FaCaretDown,
   FaUserAlt,
@@ -11,13 +11,12 @@ import {
 } from 'react-icons/fa';
 
 // import li from '../li/index.jsx';
-import Loading from '../Loading';
+// import Loading from '../Loading';
 
 
 import './style.scss';
 
 export default class Navbar extends Component {
-
   constructor(props) {
     super(props);
 
@@ -74,6 +73,7 @@ export default class Navbar extends Component {
     });
   }
 
+  // eslint-disable-next-line class-methods-use-this
   onSubmit(e) {
     e.preventDefault();
   }
@@ -81,7 +81,7 @@ export default class Navbar extends Component {
   // fire focus method when user clicked search menuItem
   searchHandleClick() {
     this.textInput.current.focus();
-  };
+  }
 
   isActive(item) {
     const { activeItem, onNav, onDisplay } = this.state;
@@ -102,14 +102,13 @@ export default class Navbar extends Component {
         </li>
 
         {navFetchLinks.map((item) => (
-          <li key={item} className={`nav__navItem ${this.isActive(item) ? 'active' : ''}`} onMouseEnter={() => this.onMouseEnter(item)} >
+          <li key={item} className={`nav__navItem ${this.isActive(item) ? 'active' : ''}`} onMouseEnter={() => this.onMouseEnter(item)}>
 
             <a href="#">{item}</a>
             <FaCaretDown className="icons icons__DD" />
-            <div className={`subMenu ${this.isActive(item) ? 'open' : ''}`}  >
-              <div className='panel__left'>
-              </div>
-              <div className='panel__right'></div>
+            <div className={`subMenu ${this.isActive(item) ? 'open' : ''}`}>
+              <div className="panel__left"> </div>
+              <div className="panel__right"> </div>
             </div>
 
           </li>
@@ -117,10 +116,10 @@ export default class Navbar extends Component {
 
         <li
           onClick={this.searchHandleClick}
-          className={`nav__navItem marginLeftAuto iconsDiv ${this.isActive('search') ? 'active' : ''}`}
+          className={`nav__navItem iconsDiv marginLeftAuto ${this.isActive('search') ? 'active' : ''}`}
           onMouseEnter={() => this.onMouseEnter('search')}
         >
-          <FaSearch className="icons icons__panel" />
+          <FaSearch className="icons icons__panel icons__search" />
 
           <div className={`navSearch ${this.isActive('search') ? 'open' : ''}`}>
             <form onSubmit={this.onSubmit}>
@@ -145,7 +144,7 @@ export default class Navbar extends Component {
         </li>
 
         <li
-          className={`nav__navItem iconsDiv pr-30 ${this.isActive('account') ? 'active' : ''}`} onMouseEnter={() => this.onMouseEnter('account')}
+          className={`nav__navItem iconsDiv ${this.isActive('account') ? 'active' : ''}`} onMouseEnter={() => this.onMouseEnter('account')}
         >
           <FaUserAlt className="icons icons__panel " />
         </li>
