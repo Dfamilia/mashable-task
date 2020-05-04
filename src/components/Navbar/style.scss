@@ -23,17 +23,17 @@
 
     &.active{
       transform: scale(5px);
-      background: #fff;
-      color: #60c8f8;
+      background: #ddf0f9;
+      color: #00A4E2;
 
       &:hover{
-        background: #fff;
-        color: #60c8f8;
+        background: #ddf0f9;
+        color: #00A4E2;
       }
     }
 
     &:hover {
-      background-color: #60c8f8;
+      background-color: #0076a3;
       color: #fff;
     }
 
@@ -44,8 +44,8 @@
       overflow: hidden;
 
       &:hover{
-        background: #fff;
-        color: #60c8f8;
+        background: #ddf0f9;
+        color: #00A4E2;
       }
     }
   }
@@ -55,17 +55,25 @@
   position: absolute;
   left: 8vw;
   top: 50px;
-  height: 400px;
+  height: 290px;
   width: 85vw;
+  background: #ddf0f9;
   text-align: center;
-  font-size: 10vw;
   color: #000;
   z-index: 0;
   overflow: hidden;
-  border: 1px solid;
   display: none;
+  border-bottom: 5px solid #00aeef;
+
+
+  .panel__left{
+    width: 9vw;
+    background: #c7e6f5;
+  }
 
 }
+
+
 
 // TODO: im here
 .follow_submenu{
@@ -81,7 +89,7 @@
 }
 
 .open{
-  display: block;
+  display: flex;
 }
 
 

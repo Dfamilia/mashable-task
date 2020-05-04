@@ -107,7 +107,9 @@ export default class Navbar extends Component {
             <a href="#">{item}</a>
             <FaCaretDown className="icons icons__DD" />
             <div className={`subMenu ${this.isActive(item) ? 'open' : ''}`}  >
-
+              <div className='panel__left'>
+              </div>
+              <div className='panel__right'></div>
             </div>
 
           </li>
