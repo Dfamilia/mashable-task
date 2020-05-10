@@ -1,5 +1,6 @@
 $color-blue-active: #00A4E2;
 $color-white: #fff;
+$list-blue:#0698dd;
 
 $background-blue:#00aeef;
 $background-blue-hover:#0076a3;
@@ -17,7 +18,7 @@ $background-panel-left: #c7e6f5;
 .nav {
   list-style-type: none;
   margin: 0;
-  padding: 0px 3vw 0 2.5vw;
+  padding: 0 7vw 0 7.5vw;
   height: 50px;
   overflow: hidden;
   background: $background-blue;
@@ -32,7 +33,7 @@ $background-panel-left: #c7e6f5;
 
     a {
       text-decoration: none;
-      padding: 8px 5px 8px 16px;
+      padding: 1vw 0.3vw 1vw 0.7vw;
       line-height: 50px;
       color: inherit;
     }
@@ -51,9 +52,9 @@ $background-panel-left: #c7e6f5;
 
 
     &--home {
-      font-size: 30px;
+      font-size: 1.8vw;
       font-weight: 900;
-      padding: 0 10px 0 0;
+      padding: 0 0.8vw 0 0;
       overflow: hidden;
 
       &:hover{
@@ -66,10 +67,10 @@ $background-panel-left: #c7e6f5;
 
 .subMenu {
   position: absolute;
-  left: 2.5vw;
+  left: 7.5vw;
   top: 50px;
   height: 290px;
-  width: 94.5vw;
+  width: 85.5vw;
   text-align: center;
   color: #000;
   z-index: 0;
@@ -77,8 +78,21 @@ $background-panel-left: #c7e6f5;
   display: none;
 
   .panel__left{
-    width: 9.9vw;
+    width: 11.7%;
     background: $background-panel-left;
+
+    .side__list{
+      padding: 15px 30px 0 0;
+      text-align: right;
+      font-size: 1.4em;
+      font-weight: bold;
+      color: $list-blue;
+      line-height: 1.7em;
+    }
+  }
+  .panel__right{
+    width: 80%;
+    display: flex;
   }
 
   @extend %margin-botton;

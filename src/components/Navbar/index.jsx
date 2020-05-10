@@ -10,9 +10,7 @@ import {
   FaSearch,
 } from 'react-icons/fa';
 
-// import li from '../li/index.jsx';
-// import Loading from '../Loading';
-
+import Card from '../Card';
 
 import './style.scss';
 
@@ -44,8 +42,6 @@ export default class Navbar extends Component {
     this.onNavMouseLeave = this.onNavMouseLeave.bind(this);
     this.onDisplayMouseLeave = this.onDisplayMouseLeave.bind(this);
   }
-  // saver input search ref
-  // let textInput = null;
 
   onMouseEnter(item) {
     this.setState({
@@ -59,12 +55,6 @@ export default class Navbar extends Component {
     this.setState({
       onNav: false,
     });
-
-    // if (!this.state.onDisplay) {
-    //   this.setState({
-    //     activeItem: '',
-    //   })
-    // }
   }
 
   onDisplayMouseLeave() {
@@ -107,10 +97,43 @@ export default class Navbar extends Component {
             <a href="#">{item}</a>
             <FaCaretDown className="icons icons__DD" />
             <div className={`subMenu ${this.isActive(item) ? 'open' : ''}`}>
-              <div className="panel__left"> </div>
-              <div className="panel__right"> </div>
+              {(item === 'SHOP' || item === 'MORE') ?
+                (
+                  <>
+                    <div className="container">
+                      <a href='#'>Title</a>
+                      <ul>
+                        <li>Task 1</li>
+                        <li>Task 2</li>
+                        <li>Task 3</li>
+                        <li>Task 4</li>
+                        <li>Task 1</li>
+                        <li>Task 2</li>
+                        <li>Task 3</li>
+                        <li>Task 4</li>
+                      </ul>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="panel__left">
+                      <ul className='side__list'>
+                        <li>Task 1</li>
+                        <li>Task 2</li>
+                        <li>Task 3</li>
+                        <li>Task 4</li>
+                      </ul>
+                    </div>
+                    <div className="panel__right">
+                      <Card title="Task 1" avatar="http://placekitten.com/200/300" description='On this one, the sub-menu items set, should contain something to notice in the front-end which type of layout should be used to render.' />
+                      <Card title="Task 2" avatar="http://placekitten.com/200/300" description='On this one, the sub-menu items set, should contain something to notice in the front-end which type of layout should be used to render.' />
+                      <Card title="Task 3" avatar="http://placekitten.com/200/300" description='On this one, the sub-menu items set, should contain something to notice in the front-end which type of layout should be used to render.' />
+                      <Card title="Task 4" avatar="http://placekitten.com/200/300" description='On this one, the sub-menu items set, should contain something to notice in the front-end which type of layout should be used to render.' />
+                      <Card title="Task 5" avatar="http://placekitten.com/200/300" description='On this one, the sub-menu items set, should contain something to notice in the front-end which type of layout should be used to render.' />
+                    </div>
+                  </>
+                )}
             </div>
-
           </li>
         ))}
 
@@ -129,7 +152,6 @@ export default class Navbar extends Component {
           </div>
         </li>
 
-        {/* TODO: IM HERE */}
         <li
           className={`nav__navItem iconsDiv pr-30 ${this.isActive('follow') ? 'active' : ''}`} onMouseEnter={() => this.onMouseEnter('follow')}
         >
@@ -152,6 +174,7 @@ export default class Navbar extends Component {
     );
   }
 }
+
 
 
 /* NOTES:
