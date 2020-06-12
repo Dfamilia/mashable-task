@@ -101,16 +101,96 @@ export default class Navbar extends Component {
                 (
                   <>
                     <div className="container">
-                      <a href='#'>Title</a>
-                      <ul>
-                        <li>Task 1</li>
-                        <li>Task 2</li>
-                        <li>Task 3</li>
-                        <li>Task 4</li>
-                        <li>Task 1</li>
-                        <li>Task 2</li>
-                        <li>Task 3</li>
-                        <li>Task 4</li>
+                      <ul className="colums">
+                        <li>
+                          <ul className="colums-list">
+                            <li className="header">
+                              <a href='#'>Task 2</a>
+                            </li>
+                            <li>
+                              <a href='#'>Task 2asdfasfasfdasdfas</a>
+                            </li>
+                            <li>
+                              <a href='#'>Task 2</a>
+                            </li>
+                            <li>
+                              <a href='#'>Task 2</a>
+                            </li>
+                            <li>
+                              <a href='#'>Task 2</a>
+                            </li>
+                          </ul>
+                        </li>
+                        <li>
+                          <ul className="colums-list">
+                            <li className="header">
+                              <a href='#'>Task 3</a>
+                            </li>
+                            <li>
+                              <a href='#'>Task 2asdfasdfasdfad</a>
+                            </li>
+                          </ul>
+                        </li>
+                        <li>
+                          <ul className="colums-list">
+                            <li className="header">
+                              <a href='#'>Task 1</a>
+                            </li>
+                            <li>
+                              <a href='#'>Task 2</a>
+                            </li>
+                          </ul>
+                        </li>
+                        <li>
+                          <ul className="colums-list">
+                            <li className="header">
+                              <a href='#'>Task 4</a>
+                            </li>
+                            <li>
+                              <a href='#'>Task 2</a>
+                            </li>
+                          </ul>
+                        </li>
+                        <li>
+                          <ul className="colums-list">
+                            <li className="header">
+                              <a href='#'>Task 1</a>
+                            </li>
+                            <li>
+                              <a href='#'>Task 2</a>
+                            </li>
+                          </ul>
+                        </li>
+                        <li>
+                          <ul className="colums-list">
+                            <li className="header">
+                              <a href='#'>Task 2</a>
+                            </li>
+                            <li>
+                              <a href='#'>Task 2</a>
+                            </li>
+                          </ul>
+                        </li>
+                        <li>
+                          <ul className="colums-list">
+                            <li className="header">
+                              <a href='#'>Task 3</a>
+                            </li>
+                            <li>
+                              <a href='#'>Task 2</a>
+                            </li>
+                          </ul>
+                        </li>
+                        <li>
+                          <ul className="colums-list">
+                            <li className="header">
+                              <a href='#'>Task 4</a>
+                            </li>
+                            <li>
+                              <a href='#'>Task 2</a>
+                            </li>
+                          </ul>
+                        </li>
                       </ul>
                     </div>
                   </>

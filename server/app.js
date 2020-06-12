@@ -2,10 +2,11 @@ const express = require('express');
 
 const app = express();
 
-app.get('/', (req, res) => {
+// MIDDLEWARES//
+
+
+app.get('/menu-items', (req, res) => {
   res.send('hello world');
 });
 
-app.listen(3000, () => {
-  console.log('app run on port 3000');
-});
+app.listen(3000, () => console.log('app run on port 3000'));
