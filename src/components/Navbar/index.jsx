@@ -43,6 +43,12 @@ export default class Navbar extends Component {
     this.onDisplayMouseLeave = this.onDisplayMouseLeave.bind(this);
   }
 
+  componentDidMount() {
+    fetch('http://localhost:9000/menu-items')
+      .then(data => data.json())
+      .then(data => this.setState({ navFetchLinks: data }));
+  }
+
   onMouseEnter(item) {
     this.setState({
       onNav: true,
