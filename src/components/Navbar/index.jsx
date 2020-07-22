@@ -21,15 +21,7 @@ export default class Navbar extends Component {
     this.textInput = React.createRef();
 
     this.state = {
-      navFetchLinks: [
-        'ENTERTAINMENT',
-        'CULTURE',
-        'TECH',
-        'SCIENCE',
-        'SOCIAL GOOD',
-        'SHOP',
-        'MORE',
-      ],
+      navFetchLinks: [],
       onNav: false,
       onDisplay: false,
       activeItem: '',
