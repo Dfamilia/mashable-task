@@ -23,7 +23,6 @@ export default class Navbar extends Component {
     this.state = {
       navFetchLinks: [],
       onNav: false,
-      onDisplay: false,
       activeItem: '',
     };
 
@@ -32,7 +31,6 @@ export default class Navbar extends Component {
     this.isActive = this.isActive.bind(this);
     this.onMouseEnter = this.onMouseEnter.bind(this);
     this.onNavMouseLeave = this.onNavMouseLeave.bind(this);
-    this.onDisplayMouseLeave = this.onDisplayMouseLeave.bind(this);
   }
 
   componentDidMount() {
@@ -55,12 +53,6 @@ export default class Navbar extends Component {
     });
   }
 
-  onDisplayMouseLeave() {
-    this.setState({
-      onDisplay: false,
-    });
-  }
-
   // eslint-disable-next-line class-methods-use-this
   onSubmit(e) {
     e.preventDefault();
@@ -72,8 +64,8 @@ export default class Navbar extends Component {
   }
 
   isActive(item) {
-    const { activeItem, onNav, onDisplay } = this.state;
-    if (item === activeItem && (onNav || onDisplay)) return true;
+    const { activeItem, onNav } = this.state;
+    if (item === activeItem && onNav) return true;
     return false;
   }
 
