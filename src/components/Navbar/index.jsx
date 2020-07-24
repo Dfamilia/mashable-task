@@ -81,138 +81,163 @@ export default class Navbar extends Component {
     const { navFetchLinks } = this.state;
     return (
       <ul className="nav" onMouseLeave={this.onNavMouseLeave}>
-        <li className="nav__navItem nav__navItem--home">
-          <a href="#">Mashable</a>
-        </li>
-
-        <li className="nav__navItem pr-10">
-          <a href="#">VIDEO</a>
-        </li>
 
         {navFetchLinks.map((item) => (
-          <li key={item} className={`nav__navItem ${this.isActive(item) ? 'active' : ''}`} onMouseEnter={() => this.onMouseEnter(item)}>
+          <>
+            {item.type === 'home' && (
+              <li
+                key={item.name}
+                className="nav__navItem nav__navItem--home"
+              >
+                <a href="#">{item.name}</a>
+              </li>
+            )}
 
-            <a href="#">{item}</a>
-            <FaCaretDown className="icons icons__DD" />
-            <div className={`subMenu ${this.isActive(item) ? 'open' : ''}`}>
-              {(item === 'SHOP' || item === 'MORE') ?
-                (
-                  <>
-                    <div className="container">
-                      <ul className="colums">
-                        <li>
-                          <ul className="colums-list">
-                            <li className="header">
-                              <a href='#'>Task 2</a>
-                            </li>
-                            <li>
-                              <a href='#'>Task 2asdfasfasfdasdfas</a>
-                            </li>
-                            <li>
-                              <a href='#'>Task 2</a>
-                            </li>
-                            <li>
-                              <a href='#'>Task 2</a>
-                            </li>
-                            <li>
-                              <a href='#'>Task 2</a>
-                            </li>
-                          </ul>
-                        </li>
-                        <li>
-                          <ul className="colums-list">
-                            <li className="header">
-                              <a href='#'>Task 3</a>
-                            </li>
-                            <li>
-                              <a href='#'>Task 2asdfasdfasdfad</a>
-                            </li>
-                          </ul>
-                        </li>
-                        <li>
-                          <ul className="colums-list">
-                            <li className="header">
-                              <a href='#'>Task 1</a>
-                            </li>
-                            <li>
-                              <a href='#'>Task 2</a>
-                            </li>
-                          </ul>
-                        </li>
-                        <li>
-                          <ul className="colums-list">
-                            <li className="header">
-                              <a href='#'>Task 4</a>
-                            </li>
-                            <li>
-                              <a href='#'>Task 2</a>
-                            </li>
-                          </ul>
-                        </li>
-                        <li>
-                          <ul className="colums-list">
-                            <li className="header">
-                              <a href='#'>Task 1</a>
-                            </li>
-                            <li>
-                              <a href='#'>Task 2</a>
-                            </li>
-                          </ul>
-                        </li>
-                        <li>
-                          <ul className="colums-list">
-                            <li className="header">
-                              <a href='#'>Task 2</a>
-                            </li>
-                            <li>
-                              <a href='#'>Task 2</a>
-                            </li>
-                          </ul>
-                        </li>
-                        <li>
-                          <ul className="colums-list">
-                            <li className="header">
-                              <a href='#'>Task 3</a>
-                            </li>
-                            <li>
-                              <a href='#'>Task 2</a>
-                            </li>
-                          </ul>
-                        </li>
-                        <li>
-                          <ul className="colums-list">
-                            <li className="header">
-                              <a href='#'>Task 4</a>
-                            </li>
-                            <li>
-                              <a href='#'>Task 2</a>
-                            </li>
-                          </ul>
-                        </li>
-                      </ul>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <div className="panel__left">
-                      <ul className='side__list'>
-                        <li>Task 1</li>
-                        <li>Task 2</li>
-                        <li>Task 3</li>
-                        <li>Task 4</li>
-                      </ul>
-                    </div>
-                    <div className="panel__right">
-                      <Card title="Task 1" avatar="http://placekitten.com/200/300" description='On this one, the sub-menu items set, should contain something to notice in the front-end which type of layout should be used to render.' />
-                      <Card title="Task 2" avatar="http://placekitten.com/200/300" description='On this one, the sub-menu items set, should contain something to notice in the front-end which type of layout should be used to render.' />
-                      <Card title="Task 3" avatar="http://placekitten.com/200/300" description='On this one, the sub-menu items set, should contain something to notice in the front-end which type of layout should be used to render.' />
-                      <Card title="Task 4" avatar="http://placekitten.com/200/300" description='On this one, the sub-menu items set, should contain something to notice in the front-end which type of layout should be used to render.' />
-                      <Card title="Task 5" avatar="http://placekitten.com/200/300" description='On this one, the sub-menu items set, should contain something to notice in the front-end which type of layout should be used to render.' />
-                    </div>
-                  </>
-                )}
-            </div>
-          </li>
+            {item.type === 'none' && (
+              <li
+                key={item.name}
+                className="nav__navItem pr-10"
+              >
+                <a href="#">{item.name}</a>
+              </li>
+            )}
+
+            {item.type === 'dd' && (
+              <li
+                key={item.name}
+                className={`nav__navItem ${this.isActive(item.name) ? 'active' : ''}`}
+                onMouseEnter={() => this.onMouseEnter(item.name)}
+              >
+                <a href="#">{item.name}</a>
+                <FaCaretDown className="icons icons__DD" />
+                <div className={`subMenu ${this.isActive(item.name) ? 'open' : ''}`}>
+                  <div className="panel__left">
+                    <ul className="side__list">
+                      <li>Task 1</li>
+                      <li>Task 2</li>
+                      <li>Task 3</li>
+                      <li>Task 4</li>
+                    </ul>
+                  </div>
+                  <div className="panel__right">
+                    <Card title="Task 1" avatar="http://placekitten.com/200/300" description='On this one, the sub-menu items set, should contain something to notice in the front-end which type of layout should be used to render.' />
+                    <Card title="Task 2" avatar="http://placekitten.com/200/300" description='On this one, the sub-menu items set, should contain something to notice in the front-end which type of layout should be used to render.' />
+                    <Card title="Task 3" avatar="http://placekitten.com/200/300" description='On this one, the sub-menu items set, should contain something to notice in the front-end which type of layout should be used to render.' />
+                    <Card title="Task 4" avatar="http://placekitten.com/200/300" description='On this one, the sub-menu items set, should contain something to notice in the front-end which type of layout should be used to render.' />
+                    <Card title="Task 5" avatar="http://placekitten.com/200/300" description='On this one, the sub-menu items set, should contain something to notice in the front-end which type of layout should be used to render.' />
+                  </div>
+                </div>
+              </li>
+            )}
+
+            {item.type === 'ddl' && (
+              <li
+                key={item.name}
+                className={`nav__navItem ${this.isActive(item.name) ? 'active' : ''}`}
+                onMouseEnter={() => this.onMouseEnter(item.name)}
+              >
+                <a href="#">{item.name}</a>
+
+                <FaCaretDown className="icons icons__DD" />
+
+                <div className={`subMenu ${this.isActive(item.name) ? 'open' : ''}`}>
+                  <div className="container">
+                    <ul className="colums">
+                      <li>
+                        <ul className="colums-list">
+                          <li className="header">
+                            <a href='#'>Task 2</a>
+                          </li>
+                          <li>
+                            <a href='#'>Task 2asdfasfasfdasdfas</a>
+                          </li>
+                          <li>
+                            <a href='#'>Task 2</a>
+                          </li>
+                          <li>
+                            <a href='#'>Task 2</a>
+                          </li>
+                          <li>
+                            <a href='#'>Task 2</a>
+                          </li>
+                        </ul>
+                      </li>
+                      <li>
+                        <ul className="colums-list">
+                          <li className="header">
+                            <a href='#'>Task 3</a>
+                          </li>
+                          <li>
+                            <a href='#'>Task 2asdfasdfasdfad</a>
+                          </li>
+                        </ul>
+                      </li>
+                      <li>
+                        <ul className="colums-list">
+                          <li className="header">
+                            <a href='#'>Task 1</a>
+                          </li>
+                          <li>
+                            <a href='#'>Task 2</a>
+                          </li>
+                        </ul>
+                      </li>
+                      <li>
+                        <ul className="colums-list">
+                          <li className="header">
+                            <a href='#'>Task 4</a>
+                          </li>
+                          <li>
+                            <a href='#'>Task 2</a>
+                          </li>
+                        </ul>
+                      </li>
+                      <li>
+                        <ul className="colums-list">
+                          <li className="header">
+                            <a href='#'>Task 1</a>
+                          </li>
+                          <li>
+                            <a href='#'>Task 2</a>
+                          </li>
+                        </ul>
+                      </li>
+                      <li>
+                        <ul className="colums-list">
+                          <li className="header">
+                            <a href='#'>Task 2</a>
+                          </li>
+                          <li>
+                            <a href='#'>Task 2</a>
+                          </li>
+                        </ul>
+                      </li>
+                      <li>
+                        <ul className="colums-list">
+                          <li className="header">
+                            <a href='#'>Task 3</a>
+                          </li>
+                          <li>
+                            <a href='#'>Task 2</a>
+                          </li>
+                        </ul>
+                      </li>
+                      <li>
+                        <ul className="colums-list">
+                          <li className="header">
+                            <a href='#'>Task 4</a>
+                          </li>
+                          <li>
+                            <a href='#'>Task 2</a>
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </li>
+            )}
+          </>
         ))}
 
         <li
@@ -231,7 +256,8 @@ export default class Navbar extends Component {
         </li>
 
         <li
-          className={`nav__navItem iconsDiv pr-30 ${this.isActive('follow') ? 'active' : ''}`} onMouseEnter={() => this.onMouseEnter('follow')}
+          className={`nav__navItem iconsDiv pr-30 ${this.isActive('follow') ? 'active' : ''}`}
+          onMouseEnter={() => this.onMouseEnter('follow')}
         >
           <FaFacebookSquare className="icons icons__panel" />
           <FaTwitter className="icons icons__panel ml-30" />
@@ -244,16 +270,15 @@ export default class Navbar extends Component {
         </li>
 
         <li
-          className={`nav__navItem iconsDiv ${this.isActive('account') ? 'active' : ''}`} onMouseEnter={() => this.onMouseEnter('account')}
+          className={`nav__navItem iconsDiv ${this.isActive('account') ? 'active' : ''}`}
+          onMouseEnter={() => this.onMouseEnter('account')}
         >
-          <FaUserAlt className="icons icons__panel " />
+          <FaUserAlt className="icons icons__panel" />
         </li>
       </ul>
     );
   }
 }
-
-
 
 /* NOTES:
   --- when we'll use react-router anchor become navLinks
