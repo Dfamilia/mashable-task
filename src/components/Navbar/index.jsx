@@ -65,8 +65,7 @@ export default class Navbar extends Component {
 
   isActive(item) {
     const { activeItem, onNav } = this.state;
-    if (item === activeItem && onNav) return true;
-    return false;
+    return item === activeItem && onNav;
   }
 
   render() {
