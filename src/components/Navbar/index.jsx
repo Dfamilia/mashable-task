@@ -111,7 +111,7 @@ export default class Navbar extends Component {
                     </ul>
                   </div>
                   <div className="panel__right">
-                    <Card title="Task 1" avatar="http://placekitten.com/200/300" description='On this one, the sub-menu items set, should contain something to notice in the front-end which type of layout should be used to render.' />
+                    <Card title="Task 1" avatar={`https://robohash.org/${'asdf'}`} description='On this one, the sub-menu items set, should contain something to notice in the front-end which type of layout should be used to render.' />
                     <Card title="Task 2" avatar="http://placekitten.com/200/300" description='On this one, the sub-menu items set, should contain something to notice in the front-end which type of layout should be used to render.' />
                     <Card title="Task 3" avatar="http://placekitten.com/200/300" description='On this one, the sub-menu items set, should contain something to notice in the front-end which type of layout should be used to render.' />
                     <Card title="Task 4" avatar="http://placekitten.com/200/300" description='On this one, the sub-menu items set, should contain something to notice in the front-end which type of layout should be used to render.' />
