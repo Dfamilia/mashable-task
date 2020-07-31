@@ -4,6 +4,7 @@ const cors = require('cors');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const menuItems = require('./routers/menuItems');
+const subMenuItems = require('./routers/subMenuItems');
 
 const app = express();
 
@@ -14,6 +15,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(helmet());
 app.use(morgan('tiny'));
 app.use('/menu-items', menuItems);
+app.use('/sub-menu-items', subMenuItems);
 
 app.get('/', (req, res) => {
   res.send('hello');

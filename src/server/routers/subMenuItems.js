@@ -1,6 +1,6 @@
 const express = require('express');
 
-const { getItems } = require('../controllers/menuItems');
+const { subMenuItems } = require('../controllers/subMenuItems');
 
 const router = express.Router();
 
@@ -10,6 +10,6 @@ const router = express.Router();
  * @param {object} res
  * @returns {list} a menu list
  */
-router.get('/', getItems);
+router.get('/', subMenuItems);
 
 module.exports = router;

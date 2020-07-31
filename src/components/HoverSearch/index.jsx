@@ -12,8 +12,11 @@ export default class HoverSearch extends Component {
       active: false,
     };
 
-    // this.onMouseOut = this.onMouseOut.bind(this);
     this.onMouseOver = this.onMouseOver.bind(this);
+  }
+
+  componentDidMount() {
+
   }
 
   componentWillUnmount() {
@@ -24,19 +27,11 @@ export default class HoverSearch extends Component {
   }
 
   onMouseOver() {
-    setTimeout(() => {
-      this.setState({
-        loading: true,
-        active: true,
-      });
-    }, 1000);
+    this.setState({
+      loading: true,
+      active: true,
+    });
   }
-
-  // onMouseOut() {
-  //   this.setState({
-  //     hovering: false,
-  //   });
-  // }
 
   render() {
     const { cls, children, id } = this.props;

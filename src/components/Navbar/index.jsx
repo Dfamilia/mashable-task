@@ -9,8 +9,10 @@ import {
   FaTwitter,
   FaSearch,
 } from 'react-icons/fa';
+import uniqid from 'uniqid';
 
 import Card from '../Card';
+import Loading from '../Loading';
 
 import './style.scss';
 
@@ -21,13 +23,16 @@ export default class Navbar extends Component {
     this.textInput = React.createRef();
 
     this.state = {
-      navFetchLinks: [],
+      navLinks: [],
+      sideLinksContent: [],
       onNav: false,
       activeItem: '',
+      sideActiveItem: '',
     };
 
     this.onSubmit = this.onSubmit.bind(this);
     this.searchHandleClick = this.searchHandleClick.bind(this);
+    this.hoverSearch = this.hoverSearch.bind(this);
     this.isActive = this.isActive.bind(this);
     this.onMouseEnter = this.onMouseEnter.bind(this);
     this.onNavMouseLeave = this.onNavMouseLeave.bind(this);
@@ -35,15 +40,21 @@ export default class Navbar extends Component {
 
   componentDidMount() {
     fetch('http://localhost:9000/menu-items')
-      .then(data => data.json())
-      .then(data => this.setState({ navFetchLinks: data }));
+      .then((fetchLinksResp) => fetchLinksResp.json())
+      .then((fetchLinksResp) => this.setState({ navLinks: fetchLinksResp }));
+  }
+
+  componentDidUpdate(none, prevState) {
+    const { activeItem } = this.state;
+    if (activeItem !== prevState.activeItem) {
+      this.setState({ sideLinksContent: [] });
+    }
   }
 
   onMouseEnter(item) {
     this.setState({
       onNav: true,
       activeItem: item,
-
     });
   }
 
@@ -63,17 +74,49 @@ export default class Navbar extends Component {
     this.textInput.current.focus();
   }
 
+  hoverSearch(sideActiveItem = '') {
+    this.setState({ sideActiveItem });
+
+
+    if (!this.saveContent(sideActiveItem)) {
+      fetch(`http://localhost:9000/sub-menu-items?${new URLSearchParams({
+        menu: sideActiveItem,
+      })}`)
+        .then((fetchResult) => fetchResult.json())
+        .then((fetchResult) => (
+          this.setState((state) => (
+            {
+              sideLinksContent:
+                [
+                  ...state.sideLinksContent,
+                  { sideActiveItem, data: fetchResult.result },
+                ],
+            }
+          ))
+        ));
+    }
+  }
+
+  saveContent(sideActiveItem) {
+    const { sideLinksContent } = this.state;
+    return sideLinksContent.find((ele) => ele.sideActiveItem === sideActiveItem);
+  }
+
   isActive(item) {
     const { activeItem, onNav } = this.state;
     return item === activeItem && onNav;
   }
 
+  // /////////////////////render//////////////////////////
   render() {
-    const { navFetchLinks } = this.state;
+    const { navLinks, sideActiveItem } = this.state;
+    const dataContent = this.saveContent(sideActiveItem);
+
+
     return (
       <ul className="nav" onMouseLeave={this.onNavMouseLeave}>
 
-        {navFetchLinks.map((item) => (
+        {navLinks.map((item) => (
           <>
             {item.type === 'home' && (
               <li
@@ -97,25 +140,33 @@ export default class Navbar extends Component {
               <li
                 key={item.name}
                 className={`nav__navItem ${this.isActive(item.name) ? 'active' : ''}`}
-                onMouseEnter={() => this.onMouseEnter(item.name)}
+                onMouseEnter={() => { this.onMouseEnter(item.name); this.hoverSearch(item.name === 'SOCIAL GOOD' ? 'social' : item.name.toLowerCase()); }}
               >
                 <a href="#">{item.name}</a>
                 <FaCaretDown className="icons icons__DD" />
                 <div className={`subMenu ${this.isActive(item.name) ? 'open' : ''}`}>
                   <div className="panel__left">
                     <ul className="side__list">
-                      <li>Task 1</li>
-                      <li>Task 2</li>
-                      <li>Task 3</li>
-                      <li>Task 4</li>
+                      {item.category.map((sideNavLinkName, i) => (
+                        <li
+                          key={`${sideNavLinkName}`}
+                          onMouseOver={() => this.hoverSearch(sideNavLinkName.toLowerCase())}
+                        >
+                          {i === 0 ? `All ${sideNavLinkName}` : sideNavLinkName}
+                        </li>
+                      ))}
                     </ul>
                   </div>
                   <div className="panel__right">
-                    <Card title="Task 1" avatar={`https://robohash.org/${'asdf'}`} description='On this one, the sub-menu items set, should contain something to notice in the front-end which type of layout should be used to render.' />
-                    <Card title="Task 2" avatar="http://placekitten.com/200/300" description='On this one, the sub-menu items set, should contain something to notice in the front-end which type of layout should be used to render.' />
-                    <Card title="Task 3" avatar="http://placekitten.com/200/300" description='On this one, the sub-menu items set, should contain something to notice in the front-end which type of layout should be used to render.' />
-                    <Card title="Task 4" avatar="http://placekitten.com/200/300" description='On this one, the sub-menu items set, should contain something to notice in the front-end which type of layout should be used to render.' />
-                    <Card title="Task 5" avatar="http://placekitten.com/200/300" description='On this one, the sub-menu items set, should contain something to notice in the front-end which type of layout should be used to render.' />
+                    {dataContent
+                      ? dataContent.data.map((sideNavContent) => (
+                        <Card
+                          key={uniqid()}
+                          title={`${sideNavContent.place_name}`}
+                          avatar={`https://robohash.org/${sideNavContent.event_id}`}
+                          description={`${sideNavContent.name}`}
+                        />
+                      )) : <Loading />}
                   </div>
                 </div>
               </li>
@@ -283,4 +334,5 @@ export default class Navbar extends Component {
 3- que el div desaparesca cuando quite el hover
 (el div estara dentro del menuItem para que mantenga el hover desde el  parent)
 
+FIXME: ERROR BUSCA COMEDY EN OTROS LINKS
 */
