@@ -44,12 +44,12 @@ export default class Navbar extends Component {
       .then((fetchLinksResp) => this.setState({ navLinks: fetchLinksResp }));
   }
 
-  componentDidUpdate(none, prevState) {
-    const { activeItem } = this.state;
-    if (activeItem !== prevState.activeItem) {
-      this.setState({ sideLinksContent: [] });
-    }
-  }
+  // componentDidUpdate(none, prevState) {
+  //   const { activeItem } = this.state;
+  //   if (activeItem !== prevState.activeItem) {
+  //     this.setState({ sideLinksContent: [] });
+  //   }
+  // }
 
   onMouseEnter(item) {
     this.setState({
@@ -111,7 +111,7 @@ export default class Navbar extends Component {
   render() {
     const { navLinks, sideActiveItem } = this.state;
     const dataContent = this.saveContent(sideActiveItem);
-
+    console.log('dataContent', dataContent);
 
     return (
       <ul className="nav" onMouseLeave={this.onNavMouseLeave}>
@@ -151,6 +151,7 @@ export default class Navbar extends Component {
                         <li
                           key={`${sideNavLinkName}`}
                           onMouseOver={() => this.hoverSearch(sideNavLinkName.toLowerCase())}
+                          className='side__list__links'
                         >
                           {i === 0 ? `All ${sideNavLinkName}` : sideNavLinkName}
                         </li>
@@ -158,6 +159,7 @@ export default class Navbar extends Component {
                     </ul>
                   </div>
                   <div className="panel__right">
+                    {console.log('datos', dataContent)}
                     {dataContent
                       ? dataContent.data.map((sideNavContent) => (
                         <Card
@@ -334,5 +336,4 @@ export default class Navbar extends Component {
 3- que el div desaparesca cuando quite el hover
 (el div estara dentro del menuItem para que mantenga el hover desde el  parent)
 
-FIXME: ERROR BUSCA COMEDY EN OTROS LINKS
 */

@@ -1,6 +1,6 @@
 const request = require('request');
 
-const apiKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiZjcyOWUxMzMtMzdhYi00OGFkLWFhNTctYjZlZGM5MWFhZmYyIiwia2V5X2lkIjoiYjM3ZjQ2NmYtMjdjNC00ZDYwLWJiZjktOGY4MGY0NGYyN2Q3IiwiaWF0IjoxNTk2MDMzNzgxfQ.0N43TSkqJ1jPObKLseKCT4LAsic_zVwjRF7A8zOZbeY';
+const apiKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNDAzYmE1NmUtODI5MS00YzgzLTgwMTUtNGYzODgwOWRmMmE4Iiwia2V5X2lkIjoiNWI1ZjUxMjQtNGMxMS00YTdlLTkzNDktYmY4ODA5YmE1NjkzIiwiaWF0IjoxNTk2MzE3NDA0fQ.qiN6_BMaMrpxF214cEFItNkBOljT6UMrqwxn3hSA6CA';
 
 exports.subMenuItems = async (req, res) => {
   const opts = {
@@ -15,10 +15,5 @@ exports.subMenuItems = async (req, res) => {
     if (err) return;
 
     res.send({ result: JSON.parse(data) });
-
-    // data: viene en formato string se utiliza JSON.parse
-    // JSON.parse(data).forEach((event, i) => {
-    //   console.log(event.name);
-    // });
   });
 };

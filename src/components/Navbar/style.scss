@@ -49,8 +49,6 @@ $background-panel-left: #c7e6f5;
       color: $color-blue-active;
     }
 
-
-
     &--home {
       font-size: 1.8vw;
       font-weight: 900;
@@ -82,12 +80,31 @@ $background-panel-left: #c7e6f5;
     background: $background-panel-left;
 
     .side__list{
-      padding: 15px 30px 0 0;
+      padding: 15px 0 0;
       text-align: right;
       font-size: 1.2em;
       font-weight: bold;
       color: $list-blue;
       line-height: 1.7em;
+
+      &__links{
+        cursor: pointer;
+        padding-right: 5px;
+
+        &:after{
+          content: '➡';
+          margin-left: 10px;
+          opacity: 0;
+        }
+
+        &:hover{
+          @extend %submenu-background;
+          &:after{
+            opacity: 1;
+          }
+
+        }
+      }
     }
   }
   .panel__right{
