@@ -256,26 +256,6 @@ export default class Navbar extends Component {
                           </li>
                         </ul>
                       </li>
-                      <li>
-                        <ul className="colums-list">
-                          <li className="header">
-                            <a href='#'>Task 3</a>
-                          </li>
-                          <li>
-                            <a href='#'>Task 2</a>
-                          </li>
-                        </ul>
-                      </li>
-                      <li>
-                        <ul className="colums-list">
-                          <li className="header">
-                            <a href='#'>Task 4</a>
-                          </li>
-                          <li>
-                            <a href='#'>Task 2</a>
-                          </li>
-                        </ul>
-                      </li>
                     </ul>
                   </div>
                 </div>
