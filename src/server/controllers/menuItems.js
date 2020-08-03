@@ -7,8 +7,8 @@ exports.getItems = (req, res) => {
     { type: 'dd', name: 'TECH', category: ['Tech', 'Mobile', 'Home', 'Business'] },
     { type: 'dd', name: 'SCIENCE', category: ['Science', 'Space', 'Climate'] },
     { type: 'dd', name: 'SOCIAL GOOD', category: ['Social', 'Lgbt', 'Activism'] },
-    { type: 'ddl', name: 'SHOP', category: ['Tech', 'Life', 'Culture', 'Tech', 'Life', 'Culture'] },
-    { type: 'ddl', name: 'MORE', category: ['Tech', 'Life', 'Culture', 'Tech', 'Life', 'Culture'] },
+    { type: 'ddl', name: 'SHOP', category: ['Art', 'Home', 'Movie'] },
+    { type: 'ddl', name: 'MORE', category: ['Art', 'Home', 'Movie'] },
   ];
 
   res.send(navList);

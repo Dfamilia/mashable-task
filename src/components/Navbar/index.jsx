@@ -23,19 +23,21 @@ export default class Navbar extends Component {
     this.textInput = React.createRef();
 
     this.state = {
-      navLinks: [],
-      sideLinksContent: [],
-      onNav: false,
       activeItem: '',
+      listContent: [],
+      navLinks: [],
+      onNav: false,
       sideActiveItem: '',
+      sideLinksContent: [],
     };
 
-    this.onSubmit = this.onSubmit.bind(this);
-    this.searchHandleClick = this.searchHandleClick.bind(this);
+    this.fetchData = this.fetchData.bind(this);
     this.hoverSearch = this.hoverSearch.bind(this);
     this.isActive = this.isActive.bind(this);
     this.onMouseEnter = this.onMouseEnter.bind(this);
     this.onNavMouseLeave = this.onNavMouseLeave.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
+    this.searchHandleClick = this.searchHandleClick.bind(this);
   }
 
   componentDidMount() {
@@ -74,16 +76,27 @@ export default class Navbar extends Component {
     this.textInput.current.focus();
   }
 
-  hoverSearch(sideActiveItem = '') {
+  hoverSearch(sideActiveItem = null, isListContent = false, subContent = []) {
     this.setState({ sideActiveItem });
+    console.log('hoverSearch', sideActiveItem);
 
+    if (!isListContent) {
+      if (!this.saveContent(sideActiveItem)) {
+        this.fetchData(sideActiveItem);
+      }
+    } else {
+      subContent.forEach((item) => !this.saveContent(item, true) && this.fetchData(item, true));
+    }
+  }
 
-    if (!this.saveContent(sideActiveItem)) {
-      fetch(`http://localhost:9000/sub-menu-items?${new URLSearchParams({
-        menu: sideActiveItem,
-      })}`)
-        .then((fetchResult) => fetchResult.json())
-        .then((fetchResult) => (
+  fetchData(sideActiveItem = null, isListContent = false) {
+    console.log('fetchData', sideActiveItem);
+    fetch(`http://localhost:9000/sub-menu-items?${new URLSearchParams({
+      menu: sideActiveItem,
+    })}`)
+      .then((fetchResult) => fetchResult.json())
+      .then((fetchResult) => {
+        if (!isListContent) {
           this.setState((state) => (
             {
               sideLinksContent:
@@ -92,14 +105,25 @@ export default class Navbar extends Component {
                   { sideActiveItem, data: fetchResult.result },
                 ],
             }
-          ))
-        ));
-    }
+          ));
+        } else {
+          this.setState((state) => (
+            {
+              listContent:
+                [
+                  ...state.listContent,
+                  { sideActiveItem, data: fetchResult.result },
+                ],
+            }
+          ));
+        }
+      });
   }
 
-  saveContent(sideActiveItem) {
-    const { sideLinksContent } = this.state;
-    return sideLinksContent.find((ele) => ele.sideActiveItem === sideActiveItem);
+  saveContent(sideActiveItem, isListContent = false) {
+    const { sideLinksContent, listContent } = this.state;
+    const fetchedList = isListContent ? listContent : sideLinksContent;
+    return fetchedList.find((ele) => ele.sideActiveItem === sideActiveItem);
   }
 
   isActive(item) {
@@ -109,9 +133,8 @@ export default class Navbar extends Component {
 
   // /////////////////////render//////////////////////////
   render() {
-    const { navLinks, sideActiveItem } = this.state;
+    const { navLinks, sideActiveItem, listContent } = this.state;
     const dataContent = this.saveContent(sideActiveItem);
-    console.log('dataContent', dataContent);
 
     return (
       <ul className="nav" onMouseLeave={this.onNavMouseLeave}>
@@ -159,7 +182,6 @@ export default class Navbar extends Component {
                     </ul>
                   </div>
                   <div className="panel__right">
-                    {console.log('datos', dataContent)}
                     {dataContent
                       ? dataContent.data.map((sideNavContent) => (
                         <Card
@@ -178,7 +200,7 @@ export default class Navbar extends Component {
               <li
                 key={item.name}
                 className={`nav__navItem ${this.isActive(item.name) ? 'active' : ''}`}
-                onMouseEnter={() => this.onMouseEnter(item.name)}
+                onMouseEnter={() => { this.onMouseEnter(item.name); this.hoverSearch(item.name, true, item.category); }}
               >
                 <a href="#">{item.name}</a>
 
@@ -187,75 +209,23 @@ export default class Navbar extends Component {
                 <div className={`subMenu ${this.isActive(item.name) ? 'open' : ''}`}>
                   <div className="container">
                     <ul className="colums">
-                      <li>
-                        <ul className="colums-list">
-                          <li className="header">
-                            <a href='#'>Task 2</a>
-                          </li>
-                          <li>
-                            <a href='#'>Task 2asdfasfasfdasdfas</a>
-                          </li>
-                          <li>
-                            <a href='#'>Task 2</a>
-                          </li>
-                          <li>
-                            <a href='#'>Task 2</a>
-                          </li>
-                          <li>
-                            <a href='#'>Task 2</a>
-                          </li>
-                        </ul>
-                      </li>
-                      <li>
-                        <ul className="colums-list">
-                          <li className="header">
-                            <a href='#'>Task 3</a>
-                          </li>
-                          <li>
-                            <a href='#'>Task 2asdfasdfasdfad</a>
-                          </li>
-                        </ul>
-                      </li>
-                      <li>
-                        <ul className="colums-list">
-                          <li className="header">
-                            <a href='#'>Task 1</a>
-                          </li>
-                          <li>
-                            <a href='#'>Task 2</a>
-                          </li>
-                        </ul>
-                      </li>
-                      <li>
-                        <ul className="colums-list">
-                          <li className="header">
-                            <a href='#'>Task 4</a>
-                          </li>
-                          <li>
-                            <a href='#'>Task 2</a>
-                          </li>
-                        </ul>
-                      </li>
-                      <li>
-                        <ul className="colums-list">
-                          <li className="header">
-                            <a href='#'>Task 1</a>
-                          </li>
-                          <li>
-                            <a href='#'>Task 2</a>
-                          </li>
-                        </ul>
-                      </li>
-                      <li>
-                        <ul className="colums-list">
-                          <li className="header">
-                            <a href='#'>Task 2</a>
-                          </li>
-                          <li>
-                            <a href='#'>Task 2</a>
-                          </li>
-                        </ul>
-                      </li>
+                      {listContent.map((content) => (
+                        <li>
+                          <ul className="colums-list">
+                            <li
+                              key={`${content.sideActiveItem}`}
+                              className="header"
+                            >
+                              <a href='#'>{content.sideActiveItem}</a>
+                            </li>
+                            {content.data.map((subContent, i) => i <= 5 && (
+                              <li key={subContent.lat + i}>
+                                <a href='#'>{subContent.name}</a>
+                              </li>
+                            ))}
+                          </ul>
+                        </li>
+                      ))}
                     </ul>
                   </div>
                 </div>
@@ -303,17 +273,3 @@ export default class Navbar extends Component {
     );
   }
 }
-
-/* NOTES:
-  --- when we'll use react-router anchor become navLinks
-
-  --- que quiero:
-1- que cuando haga hover, renderize un loading,
-  (despues: busque los datos del menuitem seleccionado y renderize)
-
-2- que cambie el stylo cuando obtenga el dato o el loadin y muestre el div con los datos
-
-3- que el div desaparesca cuando quite el hover
-(el div estara dentro del menuItem para que mantenga el hover desde el  parent)
-
-*/
