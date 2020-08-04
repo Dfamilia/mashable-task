@@ -1,11 +1,32 @@
 import React from 'react';
-import './styles.scss';
+import PropTypes from 'prop-types';
+import useStyles from './styles';
 
-export default function Card({ title, avatar, description }) {
+const Card = ({ title, avatar, description }) => {
+  const classes = useStyles();
+
   return (
-    <div className="cart">
-      <a href='#'><img className="cart__avatar" src={avatar} alt={title} /></a>
-      <a href='#'><p className="cart__description">{description}</p></a>
+    <div className={classes.cart}>
+      <a href="/">
+        <img
+          className={classes.avatar}
+          src={avatar}
+          alt={title}
+        />
+      </a>
+      <a href="/">
+        <p className={classes.description}>
+          {description}
+        </p>
+      </a>
     </div>
   );
-}
+};
+
+Card.propTypes = {
+  title: PropTypes.string.isRequired,
+  avatar: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
+};
+
+export default Card;
