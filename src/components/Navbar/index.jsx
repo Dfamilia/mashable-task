@@ -40,10 +40,13 @@ export default class Navbar extends Component {
     this.searchHandleClick = this.searchHandleClick.bind(this);
   }
 
-  componentDidMount() {
-    fetch('http://localhost:9000/menu-items')
-      .then((fetchLinksResp) => fetchLinksResp.json())
-      .then((fetchLinksResp) => this.setState({ navLinks: fetchLinksResp }));
+  async componentDidMount() {
+    const navLinks = await fetch('http://localhost:9000/menu-items');
+    const json = await navLinks.json();
+    json.forEach((item) => (item.type === 'ddl' && this.hoverSearch(item.name, true, item.category)));
+
+    console.log('nav', json);
+    console.log('listContent', this.state.listContent);
   }
 
   // componentDidUpdate(none, prevState) {
@@ -71,15 +74,14 @@ export default class Navbar extends Component {
     e.preventDefault();
   }
 
+
   // fire focus method when user clicked search menuItem
   searchHandleClick() {
     this.textInput.current.focus();
   }
 
   hoverSearch(sideActiveItem = null, isListContent = false, subContent = []) {
-    this.setState({ sideActiveItem });
-    console.log('hoverSearch', sideActiveItem);
-
+    console.log('subContent', subContent);
     if (!isListContent) {
       if (!this.saveContent(sideActiveItem)) {
         this.fetchData(sideActiveItem);
@@ -87,43 +89,47 @@ export default class Navbar extends Component {
     } else {
       subContent.forEach((item) => !this.saveContent(item, true) && this.fetchData(item, true));
     }
+
+    this.setState({ sideActiveItem });
   }
 
-  fetchData(sideActiveItem = null, isListContent = false) {
-    console.log('fetchData', sideActiveItem);
-    fetch(`http://localhost:9000/sub-menu-items?${new URLSearchParams({
+  async fetchData(sideActiveItem = null, isListContent = false) {
+    const fetched = await fetch(`http://localhost:9000/sub-menu-items?${new URLSearchParams({
       menu: sideActiveItem,
-    })}`)
-      .then((fetchResult) => fetchResult.json())
-      .then((fetchResult) => {
-        if (!isListContent) {
-          this.setState((state) => (
-            {
-              sideLinksContent:
-                [
-                  ...state.sideLinksContent,
-                  { sideActiveItem, data: fetchResult.result },
-                ],
-            }
-          ));
-        } else {
-          this.setState((state) => (
-            {
-              listContent:
-                [
-                  ...state.listContent,
-                  { sideActiveItem, data: fetchResult.result },
-                ],
-            }
-          ));
+    })}`);
+    const fetchedJson = await fetched.json();
+    if (!isListContent) {
+      this.setState((state) => (
+        {
+          sideLinksContent:
+            [
+              ...state.sideLinksContent,
+              { sideActiveItem, data: fetchedJson.result },
+            ],
         }
-      });
+      ));
+    } else {
+      this.setState((state) => (
+        {
+          listContent:
+            [
+              ...state.listContent,
+              { sideActiveItem, data: fetchedJson.result },
+            ],
+        }
+      ));
+    }
   }
 
   saveContent(sideActiveItem, isListContent = false) {
     const { sideLinksContent, listContent } = this.state;
     const fetchedList = isListContent ? listContent : sideLinksContent;
-    return fetchedList.find((ele) => ele.sideActiveItem === sideActiveItem);
+    console.log("Saved content", fetchedList);
+    console.log("Saved isListContent", isListContent);
+    console.log("Saved listContent", listContent);
+    const findResult = fetchedList.find((ele) => ele.sideActiveItem === sideActiveItem);
+    console.log(findResult)
+    return findResult;
   }
 
   isActive(item) {
@@ -135,6 +141,9 @@ export default class Navbar extends Component {
   render() {
     const { navLinks, sideActiveItem, listContent } = this.state;
     const dataContent = this.saveContent(sideActiveItem);
+    // const dataListContent = this.state.navLinks.map((item) => (item.type === 'ddl' && this.hoverSearch(item.name, true, item.category)));
+
+    console.log('listContent', listContent);
 
     return (
       <ul className="nav" onMouseLeave={this.onNavMouseLeave}>
@@ -200,7 +209,7 @@ export default class Navbar extends Component {
               <li
                 key={item.name}
                 className={`nav__navItem ${this.isActive(item.name) ? 'active' : ''}`}
-                onMouseEnter={() => { this.onMouseEnter(item.name); this.hoverSearch(item.name, true, item.category); }}
+                onMouseEnter={() => (this.onMouseEnter(item.name))}
               >
                 <a href="#">{item.name}</a>
 

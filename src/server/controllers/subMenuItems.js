@@ -14,6 +14,7 @@ exports.subMenuItems = async (req, res) => {
   request(opts, (err, r, data) => {
     if (err) return;
 
+    console.log('JSON.parse(data)', JSON.parse(data))
     res.send({ result: JSON.parse(data) });
   });
 };
