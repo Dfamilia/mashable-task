@@ -1,7 +1,4 @@
-/* eslint-disable import/extensions */
-/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-import React, { Component } from 'react';
+import React, { useState, useRef, useEffect, useCallback, Fragment } from 'react';
 import {
   FaCaretDown,
   FaUserAlt,
@@ -16,269 +13,230 @@ import Loading from '../Loading';
 
 import './style.scss';
 
-export default class Navbar extends Component {
-  constructor(props) {
-    super(props);
+const Navbar = () => {
+  const [activeItem, setActiveItem] = useState('');
+  const [listContent, setListContent] = useState([]);
+  const [navLinks, setNavLinks] = useState([]);
+  const [onNav, setOnNav] = useState(false);
+  const [sideActiveItem, setSideActiveItem] = useState('');
+  const [sideLinksContent, setSideLinksContent] = useState([]);
 
-    this.textInput = React.createRef();
+  const textInputRef = useRef(null);
 
-    this.state = {
-      activeItem: '',
-      listContent: [],
-      navLinks: [],
-      onNav: false,
-      sideActiveItem: '',
-      sideLinksContent: [],
+  const fetchData = useCallback(async (navItem, isListContent) => {
+    const requestData = await fetch(`http://localhost:9000/sub-menu-items?menu=${navItem}`);
+    const subMenuItems = await requestData.json();
+
+    const newItem = { sideActiveItem, data: subMenuItems.result };
+
+    if (isListContent) {
+      setListContent([
+        ...listContent,
+        newItem,
+      ]);
+    } else {
+      setSideLinksContent([
+        ...sideLinksContent,
+        newItem,
+      ]);
+    }
+  }, [sideLinksContent, listContent]);
+
+  useEffect(() => {
+    const getMenuItems = async () => {
+      const requestResult = await fetch('http://localhost:9000/menu-items');
+      const menuItems = await requestResult.json();
+      setNavLinks(menuItems);
+      menuItems.forEach(item => {
+        if (item.type === 'ddl') {
+          fetchData(item, true);
+        }
+      });
     };
+    getMenuItems();
+  }, []);
 
-    this.fetchData = this.fetchData.bind(this);
-    this.hoverSearch = this.hoverSearch.bind(this);
-    this.isActive = this.isActive.bind(this);
-    this.onMouseEnter = this.onMouseEnter.bind(this);
-    this.onNavMouseLeave = this.onNavMouseLeave.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
-    this.searchHandleClick = this.searchHandleClick.bind(this);
-  }
+  const savedContent = useCallback((navItem, isListContent) => {
+    const fetchedList = isListContent ? listContent : sideLinksContent;
+    return fetchedList.find((item) => item.sideActiveItem === navItem);
+  }, [listContent, sideLinksContent]);
 
-  async componentDidMount() {
-    const navLinks = await fetch('http://localhost:9000/menu-items');
-    const json = await navLinks.json();
-    json.forEach((item) => (item.type === 'ddl' && this.hoverSearch(item.name, true, item.category)));
+  const hoverSearch = useCallback((navItem, isListContent, subContent = []) => {
+    if (isListContent) {
+      subContent.forEach((item) => {
+        if (!savedContent(item, true)) {
+          fetchData(item, true);
+        }
+      });
+    } else if (!savedContent(navItem)) {
+      fetchData(navItem);
+    }
+    setSideActiveItem(navItem);
+  }, []);
 
-    console.log('nav', json);
-    console.log('listContent', this.state.listContent);
-  }
+  const onMouseEnter = useCallback((item, name, isListContent, subContent) => {
+    return () => {
+      setActiveItem(item);
+      setOnNav(true);
 
-  // componentDidUpdate(none, prevState) {
-  //   const { activeItem } = this.state;
-  //   if (activeItem !== prevState.activeItem) {
-  //     this.setState({ sideLinksContent: [] });
-  //   }
-  // }
+      if (name) {
+        hoverSearch(name, isListContent, subContent);
+      }
+    };
+  }, []);
 
-  onMouseEnter(item) {
-    this.setState({
-      onNav: true,
-      activeItem: item,
-    });
-  }
+  const onMouseLeave = useCallback(() => {
+    setOnNav(false);
+  }, []);
 
-  onNavMouseLeave() {
-    this.setState({
-      onNav: false,
-    });
-  }
 
-  // eslint-disable-next-line class-methods-use-this
-  onSubmit(e) {
-    e.preventDefault();
-  }
-
+  const onSubmit = useCallback((e) => e.preventDefault(), []);
 
   // fire focus method when user clicked search menuItem
-  searchHandleClick() {
-    this.textInput.current.focus();
-  }
+  const searchHandleClick = useCallback(() => textInputRef.current.focus(), []);
 
-  hoverSearch(sideActiveItem = null, isListContent = false, subContent = []) {
-    console.log('subContent', subContent);
-    if (!isListContent) {
-      if (!this.saveContent(sideActiveItem)) {
-        this.fetchData(sideActiveItem);
-      }
-    } else {
-      subContent.forEach((item) => !this.saveContent(item, true) && this.fetchData(item, true));
-    }
+  const isActive = useCallback((item) => item === activeItem && onNav, [activeItem, onNav]);
 
-    this.setState({ sideActiveItem });
-  }
+  const dataContent = savedContent(sideActiveItem);
 
-  async fetchData(sideActiveItem = null, isListContent = false) {
-    const fetched = await fetch(`http://localhost:9000/sub-menu-items?${new URLSearchParams({
-      menu: sideActiveItem,
-    })}`);
-    const fetchedJson = await fetched.json();
-    if (!isListContent) {
-      this.setState((state) => (
-        {
-          sideLinksContent:
-            [
-              ...state.sideLinksContent,
-              { sideActiveItem, data: fetchedJson.result },
-            ],
-        }
-      ));
-    } else {
-      this.setState((state) => (
-        {
-          listContent:
-            [
-              ...state.listContent,
-              { sideActiveItem, data: fetchedJson.result },
-            ],
-        }
-      ));
-    }
-  }
+  return (
+    <ul className="nav" onMouseLeave={onMouseLeave}>
+      {navLinks.map((item) => (
+        <Fragment key={uniqid()}>
+          {item.type === 'home' && (
+            <li
+              key={item.name}
+              className="nav__navItem nav__navItem--home"
+            >
+              <a href="/">{item.name}</a>
+            </li>
+          )}
 
-  saveContent(sideActiveItem, isListContent = false) {
-    const { sideLinksContent, listContent } = this.state;
-    const fetchedList = isListContent ? listContent : sideLinksContent;
-    console.log("Saved content", fetchedList);
-    console.log("Saved isListContent", isListContent);
-    console.log("Saved listContent", listContent);
-    const findResult = fetchedList.find((ele) => ele.sideActiveItem === sideActiveItem);
-    console.log(findResult)
-    return findResult;
-  }
+          {item.type === 'none' && (
+            <li
+              key={item.name}
+              className="nav__navItem pr-10"
+            >
+              <a href="/">{item.name}</a>
+            </li>
+          )}
 
-  isActive(item) {
-    const { activeItem, onNav } = this.state;
-    return item === activeItem && onNav;
-  }
-
-  // /////////////////////render//////////////////////////
-  render() {
-    const { navLinks, sideActiveItem, listContent } = this.state;
-    const dataContent = this.saveContent(sideActiveItem);
-    // const dataListContent = this.state.navLinks.map((item) => (item.type === 'ddl' && this.hoverSearch(item.name, true, item.category)));
-
-    console.log('listContent', listContent);
-
-    return (
-      <ul className="nav" onMouseLeave={this.onNavMouseLeave}>
-
-        {navLinks.map((item) => (
-          <>
-            {item.type === 'home' && (
-              <li
-                key={item.name}
-                className="nav__navItem nav__navItem--home"
-              >
-                <a href="#">{item.name}</a>
-              </li>
-            )}
-
-            {item.type === 'none' && (
-              <li
-                key={item.name}
-                className="nav__navItem pr-10"
-              >
-                <a href="#">{item.name}</a>
-              </li>
-            )}
-
-            {item.type === 'dd' && (
-              <li
-                key={item.name}
-                className={`nav__navItem ${this.isActive(item.name) ? 'active' : ''}`}
-                onMouseEnter={() => { this.onMouseEnter(item.name); this.hoverSearch(item.name === 'SOCIAL GOOD' ? 'social' : item.name.toLowerCase()); }}
-              >
-                <a href="#">{item.name}</a>
-                <FaCaretDown className="icons icons__DD" />
-                <div className={`subMenu ${this.isActive(item.name) ? 'open' : ''}`}>
-                  <div className="panel__left">
-                    <ul className="side__list">
-                      {item.category.map((sideNavLinkName, i) => (
-                        <li
-                          key={`${sideNavLinkName}`}
-                          onMouseOver={() => this.hoverSearch(sideNavLinkName.toLowerCase())}
-                          className='side__list__links'
-                        >
-                          {i === 0 ? `All ${sideNavLinkName}` : sideNavLinkName}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div className="panel__right">
-                    {dataContent
-                      ? dataContent.data.map((sideNavContent) => (
-                        <Card
-                          key={uniqid()}
-                          title={`${sideNavContent.place_name}`}
-                          avatar={`https://robohash.org/${sideNavContent.event_id}`}
-                          description={`${sideNavContent.name}`}
-                        />
-                      )) : <Loading />}
-                  </div>
+          {item.type === 'dd' && (
+            <li
+              key={item.name}
+              className={`nav__navItem ${isActive(item.name) ? 'active' : ''}`}
+              onMouseEnter={onMouseEnter(item.name, item.name === 'SOCIAL GOOD' ? 'social' : item.name.toLowerCase())}
+            >
+              <a href="/">{item.name}</a>
+              <FaCaretDown className="icons icons__DD" />
+              <div className={`subMenu ${isActive(item.name) ? 'open' : ''}`}>
+                <div className="panel__left">
+                  <ul className="side__list">
+                    {item.category && item.category.map((sideNavLinkName, i) => (
+                      <li
+                        key={sideNavLinkName}
+                        onMouseOver={() => hoverSearch(sideNavLinkName.toLowerCase(), true)}
+                        onFocus={() => hoverSearch(sideNavLinkName.toLowerCase(), true)}
+                        className="side__list__links"
+                      >
+                        {i === 0 ? `All ${sideNavLinkName}` : sideNavLinkName}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-              </li>
-            )}
+                <div className="panel__right">
+                  {dataContent
+                    ? dataContent.data.map((sideNavContent) => (
+                      <Card
+                        key={uniqid()}
+                        title={`${sideNavContent.place_name}`}
+                        avatar={`https://robohash.org/${sideNavContent.event_id}`}
+                        description={`${sideNavContent.name}`}
+                      />
+                    )) : <Loading />}
+                </div>
+              </div>
+            </li>
+          )}
 
-            {item.type === 'ddl' && (
-              <li
-                key={item.name}
-                className={`nav__navItem ${this.isActive(item.name) ? 'active' : ''}`}
-                onMouseEnter={() => (this.onMouseEnter(item.name))}
-              >
-                <a href="#">{item.name}</a>
+          {item.type === 'ddl' && (
+            <li
+              key={item.name}
+              className={`nav__navItem ${isActive(item.name) ? 'active' : ''}`}
+              onMouseEnter={onMouseEnter(item.name, item.name, true, item.category)}
+            >
+              <a href="/">{item.name}</a>
 
-                <FaCaretDown className="icons icons__DD" />
+              <FaCaretDown className="icons icons__DD" />
 
-                <div className={`subMenu ${this.isActive(item.name) ? 'open' : ''}`}>
-                  <div className="container">
-                    <ul className="colums">
-                      {listContent.map((content) => (
-                        <li>
-                          <ul className="colums-list">
-                            <li
-                              key={`${content.sideActiveItem}`}
-                              className="header"
-                            >
-                              <a href='#'>{content.sideActiveItem}</a>
+              <div className={`subMenu ${isActive(item.name) ? 'open' : ''}`}>
+                <div className="container">
+                  <ul className="colums">
+                    {listContent && listContent.map((content) => (
+                      <li key={uniqid()}>
+                        <ul className="colums-list">
+                          <li
+                            key={`${content.sideActiveItem}`}
+                            className="header"
+                          >
+                            <a href="/">{content.sideActiveItem}</a>
+                          </li>
+                          <pre>
+                            {JSON.stringify(content)}
+                          </pre>
+                          {/* {content.data && content.data.map((subContent, i) => i <= 5 && (
+                            <li key={uniqid()}>
+                              <a href="/">{subContent.name}</a>
                             </li>
-                            {content.data.map((subContent, i) => i <= 5 && (
-                              <li key={subContent.lat + i}>
-                                <a href='#'>{subContent.name}</a>
-                              </li>
-                            ))}
-                          </ul>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+                          ))} */}
+                        </ul>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-              </li>
-            )}
-          </>
-        ))}
+              </div>
+            </li>
+          )}
+        </Fragment>
+      ))}
 
-        <li
-          onClick={this.searchHandleClick}
-          className={`nav__navItem iconsDiv marginLeftAuto ${this.isActive('search') ? 'active' : ''}`}
-          onMouseEnter={() => this.onMouseEnter('search')}
-        >
-          <FaSearch className="icons icons__panel icons__search" />
+      <li
+        onClick={searchHandleClick}
+        className={`nav__navItem iconsDiv marginLeftAuto ${isActive('search') ? 'active' : ''}`}
+        onMouseEnter={onMouseEnter('search')}
+      >
+        <FaSearch className="icons icons__panel icons__search" />
 
-          <div className={`navSearch ${this.isActive('search') ? 'open' : ''}`}>
-            <form onSubmit={this.onSubmit}>
-              <input type="text" ref={this.textInput} id="search" />
-              <button type="submit">Search</button>
-            </form>
-          </div>
-        </li>
+        <div className={`navSearch ${isActive('search') ? 'open' : ''}`}>
+          <form onSubmit={onSubmit}>
+            <input type="text" ref={textInputRef} id="search" />
+            <button type="submit">Search</button>
+          </form>
+        </div>
+      </li>
 
-        <li
-          className={`nav__navItem iconsDiv pr-30 ${this.isActive('follow') ? 'active' : ''}`}
-          onMouseEnter={() => this.onMouseEnter('follow')}
-        >
-          <FaFacebookSquare className="icons icons__panel" />
-          <FaTwitter className="icons icons__panel ml-30" />
-          <div className={`follow_submenu ${this.isActive('follow') ? 'open' : ''}`}>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-            Nesciunt reprehenderit quos ipsum aliquid officia consequatur
-            aut perferendis id eum! Enim delectus id natus commodi
-            ad deserunt exercitationem maxime fugiat laudantium!
-          </div>
-        </li>
+      <li
+        className={`nav__navItem iconsDiv pr-30 ${isActive('follow') ? 'active' : ''}`}
+        onMouseEnter={onMouseEnter('follow')}
+      >
+        <FaFacebookSquare className="icons icons__panel" />
+        <FaTwitter className="icons icons__panel ml-30" />
+        <div className={`follow_submenu ${isActive('follow') ? 'open' : ''}`}>
+          Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+          Nesciunt reprehenderit quos ipsum aliquid officia consequatur
+          aut perferendis id eum! Enim delectus id natus commodi
+          ad deserunt exercitationem maxime fugiat laudantium!
+        </div>
+      </li>
 
-        <li
-          className={`nav__navItem iconsDiv ${this.isActive('account') ? 'active' : ''}`}
-          onMouseEnter={() => this.onMouseEnter('account')}
-        >
-          <FaUserAlt className="icons icons__panel" />
-        </li>
-      </ul>
-    );
-  }
-}
+      <li
+        className={`nav__navItem iconsDiv ${isActive('account') ? 'active' : ''}`}
+        onMouseEnter={onMouseEnter('account')}
+      >
+        <FaUserAlt className="icons icons__panel" />
+      </li>
+    </ul>
+  );
+};
+
+export default Navbar;
