@@ -23,58 +23,71 @@ const Navbar = () => {
 
   const textInputRef = useRef(null);
 
+  // busca los datos del sub-content
   const fetchData = useCallback(async (navItem, isListContent) => {
+    console.log('fetchData', navItem, isListContent)
+
     const requestData = await fetch(`http://localhost:9000/sub-menu-items?menu=${navItem}`);
     const subMenuItems = await requestData.json();
 
-    const newItem = { sideActiveItem, data: subMenuItems.result };
+    const newItem = { navItem, data: subMenuItems.result };
 
     if (isListContent) {
-      setListContent([
+      console.log('fetchdata2', [...listContent, newItem])
+      await setListContent((listContent) => [
         ...listContent,
         newItem,
       ]);
     } else {
-      setSideLinksContent([
+      await setSideLinksContent((sideLinksContent) => [
         ...sideLinksContent,
         newItem,
       ]);
     }
   }, [sideLinksContent, listContent]);
 
-  useEffect(() => {
-    const getMenuItems = async () => {
-      const requestResult = await fetch('http://localhost:9000/menu-items');
-      const menuItems = await requestResult.json();
-      setNavLinks(menuItems);
-      menuItems.forEach(item => {
-        if (item.type === 'ddl') {
-          fetchData(item, true);
-        }
-      });
-    };
-    getMenuItems();
-  }, []);
-
+  // verifica si el dato existe en cache
   const savedContent = useCallback((navItem, isListContent) => {
+    console.log('sc', isListContent);
     const fetchedList = isListContent ? listContent : sideLinksContent;
-    return fetchedList.find((item) => item.sideActiveItem === navItem);
+    const isFechedList = fetchedList.find((item) => item.sideActiveItem === navItem);
+    console.log('sc2', isFechedList);
+    console.log('sc3', listContent);
+    console.log('sc4', sideLinksContent);
+    return isFechedList;
   }, [listContent, sideLinksContent]);
 
-  const hoverSearch = useCallback((navItem, isListContent, subContent = []) => {
+  const hoverSearch = useCallback(async (navItem, isListContent, subContent = []) => {
+    console.log('hsearch', navItem, isListContent, subContent);
+
     if (isListContent) {
-      subContent.forEach((item) => {
-        if (!savedContent(item, true)) {
-          fetchData(item, true);
+      for (const item of subContent) {
+        if (await !savedContent(item, true)) {
+          await fetchData(item, true);
         }
-      });
+      }
     } else if (!savedContent(navItem)) {
       fetchData(navItem);
     }
     setSideActiveItem(navItem);
   }, []);
 
+  useEffect(() => {
+    const getMenuItems = async () => {
+      const requestResult = await fetch('http://localhost:9000/menu-items');
+      const menuItems = await requestResult.json();
+      setNavLinks(menuItems);
+      menuItems.forEach((item) => {
+        if (item.type === 'ddl') {
+          hoverSearch(item.name, true, item.category);
+        }
+      });
+    };
+    getMenuItems();
+  }, []);
+
   const onMouseEnter = useCallback((item, name, isListContent, subContent) => {
+    console.log('holar', item, name, isListContent, subContent);
     return () => {
       setActiveItem(item);
       setOnNav(true);
@@ -100,7 +113,16 @@ const Navbar = () => {
   const dataContent = savedContent(sideActiveItem);
 
   return (
+    <>
+      <pre>{JSON.stringify(sideLinksContent)}</pre>
+      <pre>{JSON.stringify(navLinks)}</pre>
+    </>
+  );
+
+  return (
     <ul className="nav" onMouseLeave={onMouseLeave}>
+      {console.log('group', navLinks)}
+
       {navLinks.map((item) => (
         <Fragment key={uniqid()}>
           {item.type === 'home' && (
@@ -125,7 +147,7 @@ const Navbar = () => {
             <li
               key={item.name}
               className={`nav__navItem ${isActive(item.name) ? 'active' : ''}`}
-              onMouseEnter={onMouseEnter(item.name, item.name === 'SOCIAL GOOD' ? 'social' : item.name.toLowerCase())}
+              onMouseEnter={() => onMouseEnter(item.name, item.name === 'SOCIAL GOOD' ? 'social' : item.name.toLowerCase())}
             >
               <a href="/">{item.name}</a>
               <FaCaretDown className="icons icons__DD" />
@@ -159,51 +181,14 @@ const Navbar = () => {
             </li>
           )}
 
-          {item.type === 'ddl' && (
-            <li
-              key={item.name}
-              className={`nav__navItem ${isActive(item.name) ? 'active' : ''}`}
-              onMouseEnter={onMouseEnter(item.name, item.name, true, item.category)}
-            >
-              <a href="/">{item.name}</a>
 
-              <FaCaretDown className="icons icons__DD" />
-
-              <div className={`subMenu ${isActive(item.name) ? 'open' : ''}`}>
-                <div className="container">
-                  <ul className="colums">
-                    {listContent && listContent.map((content) => (
-                      <li key={uniqid()}>
-                        <ul className="colums-list">
-                          <li
-                            key={`${content.sideActiveItem}`}
-                            className="header"
-                          >
-                            <a href="/">{content.sideActiveItem}</a>
-                          </li>
-                          <pre>
-                            {JSON.stringify(content)}
-                          </pre>
-                          {/* {content.data && content.data.map((subContent, i) => i <= 5 && (
-                            <li key={uniqid()}>
-                              <a href="/">{subContent.name}</a>
-                            </li>
-                          ))} */}
-                        </ul>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            </li>
-          )}
         </Fragment>
       ))}
 
       <li
         onClick={searchHandleClick}
         className={`nav__navItem iconsDiv marginLeftAuto ${isActive('search') ? 'active' : ''}`}
-        onMouseEnter={onMouseEnter('search')}
+        onMouseEnter={() => onMouseEnter('search')}
       >
         <FaSearch className="icons icons__panel icons__search" />
 
@@ -217,7 +202,7 @@ const Navbar = () => {
 
       <li
         className={`nav__navItem iconsDiv pr-30 ${isActive('follow') ? 'active' : ''}`}
-        onMouseEnter={onMouseEnter('follow')}
+        onMouseEnter={() => onMouseEnter('follow')}
       >
         <FaFacebookSquare className="icons icons__panel" />
         <FaTwitter className="icons icons__panel ml-30" />
@@ -231,7 +216,7 @@ const Navbar = () => {
 
       <li
         className={`nav__navItem iconsDiv ${isActive('account') ? 'active' : ''}`}
-        onMouseEnter={onMouseEnter('account')}
+        onMouseEnter={() => onMouseEnter('account')}
       >
         <FaUserAlt className="icons icons__panel" />
       </li>
