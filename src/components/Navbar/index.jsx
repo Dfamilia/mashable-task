@@ -1,5 +1,18 @@
-import React, { useState, useRef, useEffect, useCallback, Fragment } from 'react';
-import { FaCaretDown, FaUserAlt, FaFacebookSquare, FaTwitter, FaSearch } from 'react-icons/fa';
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
+  Fragment,
+} from 'react';
+import {
+  FaCaretDown,
+  FaUserAlt,
+  FaFacebookSquare,
+  FaTwitter,
+  FaSearch,
+} from 'react-icons/fa';
+
 import uniqid from 'uniqid';
 
 import Card from '../Card';
@@ -17,26 +30,56 @@ const Navbar = () => {
 
   const textInputRef = useRef(null);
 
-  const getItemFromList = useCallback(
-    (category, list) => list.find((item) => item.sideActiveItem === category),
-    [],
+  // verify and return data if this category data was previous fetched
+  const getItemFromListContent = (category, list = []) => list.find(
+    (item) => item.navItem === category && item,
+  );
+  // verify and return data if this navItem data was previous fetched
+  const getItemFromSideLinksContent = (navItem, list = []) => list.find(
+    (item) => item.navItem === navItem && item,
   );
 
+  const fetchData = async (source, isNavLinks = false) => {
+    if (isNavLinks) {
+      const requestResult = await fetch('http://localhost:9000/menu-items');
+      return requestResult.json();
+    }
+    const response = await fetch(`http://localhost:9000/sub-menu-items?menu=${source}`);
+    return response.json();
+  };
+
+  // fetch data by category
   const getSubMenuItemsByCategories = async (categories = []) => Promise.all(
     categories.map(async (category) => {
-      const savedItem = getItemFromList(category, listContent);
+      const savedItem = getItemFromListContent(category, listContent);
       if (!savedItem) {
-        const response = await fetch(`http://localhost:9000/sub-menu-items?menu=${category}`);
-        const jsonData = await response.json();
-        return Promise.resolve(jsonData.result);
+        const jsonData = await fetchData(category);
+        return Promise.resolve({ navItem: category, data: jsonData.result });
       }
+      return Promise.resolve(savedItem);
     }),
   );
 
+  const hoverSearchData = async (navItem, list) => {
+    const savedItem = await getItemFromSideLinksContent(navItem, list);
+    if (!savedItem) {
+      const subMenuItems = await fetchData(navItem);
+      const newItem = { navItem, data: subMenuItems.result };
+
+      setSideLinksContent((currentSideLinksContent) => [
+        ...currentSideLinksContent,
+        newItem,
+      ]);
+    }
+    setSideActiveItem(navItem);
+  };
+
+  // on load fetch all menu links
   useEffect(() => {
     const getMenuItems = async () => {
-      const requestResult = await fetch('http://localhost:9000/menu-items');
-      const menuItems = await requestResult.json();
+      const menuItems = await fetchData(null, true);
+
+      // concat all category items of ddl navLinks
       const categories = menuItems.reduce((prev, item) => {
         if (item.type === 'ddl') {
           return prev.concat(item.category);
@@ -46,121 +89,40 @@ const Navbar = () => {
       const subMenuItems = await getSubMenuItemsByCategories([...new Set(categories)]);
       setNavLinks(menuItems);
       // eslint-disable-next-line no-shadow
-      setListContent((listContent) => listContent.concat(subMenuItems));
+      setListContent(listContent.concat(subMenuItems));
     };
     getMenuItems();
   }, []);
 
-  return (
-    <>
-      <pre>{JSON.stringify(listContent)}</pre>
-      <pre>{JSON.stringify(navLinks)}</pre>
-    </>
+  const onMouseEnter = (itemName, search = false, list = []) => {
+    if (search) {
+      hoverSearchData(itemName, list);
+    }
+    setOnNav(true);
+    setActiveItem(itemName);
+  };
+
+  const isActive = (item) => {
+    const localItem = item === 'SOCIAL GOOD' ? 'social' : item;
+    return localItem === activeItem && onNav;
+  };
+
+  const onMouseLeave = useCallback(() => {
+    setOnNav(false);
+  }, []);
+
+  const onSubmit = useCallback((e) => e.preventDefault(), []);
+
+  // fire focus method when user clicked search menuItem
+  const searchHandleClick = useCallback(() => textInputRef.current.focus(), []);
+
+  const dataContent = useCallback(
+    getItemFromSideLinksContent(sideActiveItem, sideLinksContent),
+    [sideActiveItem],
   );
-  //   // busca los datos del sub-content
-  //   const fetchData = useCallback(async (navItem, isListContent) => {
-  //     console.log('fetchData', navItem, isListContent)
 
-  //     const requestData = await fetch(`http://localhost:9000/sub-menu-items?menu=${navItem}`);
-  //     const subMenuItems = await requestData.json();
-
-  //     const newItem = { navItem, data: subMenuItems.result };
-
-  //     if (isListContent) {
-  //       console.log('fetchdata2', [...listContent, newItem])
-  //       await setListContent((listContent) => [
-  //         ...listContent,
-  //         newItem,
-  //       ]);
-  //     } else {
-  //       await setSideLinksContent((sideLinksContent) => [
-  //         ...sideLinksContent,
-  //         newItem,
-  //       ]);
-  //     }
-  //   }, [sideLinksContent, listContent]);
-
-  //   // verifica si el dato existe en cache
-  //   const savedContent = useCallback((navItem, isListContent) => {
-  //     console.log('sc', isListContent);
-  //     const fetchedList = isListContent ? listContent : sideLinksContent;
-  //     const isFechedList = fetchedList.find((item) => item.sideActiveItem === navItem);
-  //     console.log('sc2', isFechedList);
-  //     console.log('sc3', listContent);
-  //     console.log('sc4', sideLinksContent);
-  //     return isFechedList;
-  //   }, [listContent, sideLinksContent]);
-
-  //   const hoverSearch = useCallback(async (navItem, isListContent, subContent = []) => {
-  //     console.log('hsearch', navItem, isListContent, subContent);
-
-  //     if (isListContent) {
-  //       for (const item of subContent) {
-  //         if (await !savedContent(item, true)) {
-  //           await fetchData(item, true);
-  //         }
-  //       }
-  //     } else if (!savedContent(navItem)) {
-  //       fetchData(navItem);
-  //     }
-  //     setSideActiveItem(navItem);
-  //   }, []);
-
-  //   useEffect(() => {
-  //     const getMenuItems = async () => {
-  //       const requestResult = await fetch('http://localhost:9000/menu-items');
-  //       const menuItems = await requestResult.json();
-  //       setNavLinks(menuItems);
-  //       menuItems.forEach((item) => {
-  //         if (item.type === 'ddl') {
-  //           hoverSearch(item.name, true, item.category);
-  //         }
-  //       });
-  //     };
-  //     getMenuItems();
-  //   }, []);
-
-  //   const onMouseEnter = useCallback((item, name, isListContent, subContent) => {
-  //     console.log('holar', item, name, isListContent, subContent);
-  //     return () => {
-  //       setActiveItem(item);
-  //       setOnNav(true);
-
-  //       if (name) {
-  //         hoverSearch(name, isListContent, subContent);
-  //       }
-  //     };
-  //   }, []);
-
-  //   const onMouseLeave = useCallback(() => {
-  //     setOnNav(false);
-  //   }, []);
-
-  //   const onSubmit = useCallback((e) => e.preventDefault(), []);
-
-  //   // fire focus method when user clicked search menuItem
-  //   const searchHandleClick = useCallback(() => textInputRef.current.focus(), []);
-
-  //   const isActive = useCallback((item) => item === activeItem && onNav, [activeItem, onNav]);
-
-  //   const dataContent = savedContent(sideActiveItem);
-
-  //   return (
-  //     <>
-  //       <pre>{JSON.stringify(sideLinksContent)}</pre>
-  //       <pre>{JSON.stringify(navLinks)}</pre>
-  //     </>
-  //   );
-
-  const onMouseLeave = () => {};
-  const searchHandleClick = () => {};
-  const isActive = () => false;
-  const onSubmit = () => {};
-  const dataContent = undefined;
   return (
     <ul className="nav" onMouseLeave={onMouseLeave}>
-      {console.log('group', navLinks)}
-
       {navLinks.map((item) => (
         <Fragment key={uniqid()}>
           {item.type === 'home' && (
@@ -179,29 +141,26 @@ const Navbar = () => {
             <li
               key={item.name}
               className={`nav__navItem ${isActive(item.name) ? 'active' : ''}`}
-              onMouseEnter={() =>
-                onMouseEnter(
-                  item.name,
-                  item.name === 'SOCIAL GOOD' ? 'social' : item.name.toLowerCase()
-                )
-              }
+              onMouseEnter={() => onMouseEnter(
+                item.name === 'SOCIAL GOOD' ? 'social' : item.name,
+                true,
+                sideLinksContent,
+              )}
             >
               <a href="/">{item.name}</a>
               <FaCaretDown className="icons icons__DD" />
               <div className={`subMenu ${isActive(item.name) ? 'open' : ''}`}>
                 <div className="panel__left">
                   <ul className="side__list">
-                    {item.category &&
-                      item.category.map((sideNavLinkName, i) => (
-                        <li
-                          key={sideNavLinkName}
-                          onMouseOver={() => hoverSearch(sideNavLinkName.toLowerCase(), true)}
-                          onFocus={() => hoverSearch(sideNavLinkName.toLowerCase(), true)}
-                          className="side__list__links"
-                        >
-                          {i === 0 ? `All ${sideNavLinkName}` : sideNavLinkName}
-                        </li>
-                      ))}
+                    {item.category && item.category.map((sideNavLinkName, i) => (
+                      <li
+                        key={sideNavLinkName}
+                        onMouseEnter={() => hoverSearchData(sideNavLinkName, sideLinksContent)}
+                        className="side__list__links"
+                      >
+                        {i === 0 ? `All ${sideNavLinkName}` : sideNavLinkName}
+                      </li>
+                    ))}
                   </ul>
                 </div>
                 <div className="panel__right">
@@ -214,9 +173,48 @@ const Navbar = () => {
                         description={`${sideNavContent.name}`}
                       />
                     ))
-                  ) : (
-                    <Loading />
-                  )}
+                  )
+                    : (
+                      <Loading />
+                    )}
+                </div>
+              </div>
+            </li>
+          )}
+
+          {item.type === 'ddl' && (
+            <li
+              key={item.name}
+              className={`nav__navItem ${isActive(item.name) ? 'active' : ''}`}
+              onMouseEnter={() => onMouseEnter(item.name)}
+            >
+              <a href="/">{item.name}</a>
+
+              <FaCaretDown className="icons icons__DD" />
+
+              <div className={`subMenu ${isActive(item.name) ? 'open' : ''}`}>
+                <div className="container">
+                  <ul className="colums">
+                    {listContent && listContent.map((content) => (
+                      <li key={uniqid()}>
+                        <ul className="colums-list">
+                          <li
+                            key={`${content.navItem}`}
+                            className="header"
+                          >
+                            <a href="/">{content.navItem}</a>
+                          </li>
+                          {
+                            content.data && content.data.map((subContent, i) => i <= 5 && (
+                              <li key={uniqid()}>
+                                <a href="/">{subContent.name}</a>
+                              </li>
+                            ))
+                          }
+                        </ul>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </div>
             </li>
@@ -225,8 +223,8 @@ const Navbar = () => {
       ))}
 
       <li
-        onClick={searchHandleClick}
         className={`nav__navItem iconsDiv marginLeftAuto ${isActive('search') ? 'active' : ''}`}
+        onClick={searchHandleClick}
         onMouseEnter={() => onMouseEnter('search')}
       >
         <FaSearch className="icons icons__panel icons__search" />
